@@ -12,8 +12,10 @@
           <nav class="mr-auto">
             <b-button-group vertical style="width: 100%;">
               <b-button variant="dark" v-on:click="selectFeature(home)">Home</b-button>
-              <b-button variant="dark">Middle</b-button>
-              <b-button variant="dark" v-on:click="selectFeature()">Bottom</b-button>
+              <b-button variant="dark" v-on:click="selectFeature(autoMode)">Auto Mode</b-button>
+              <b-button variant="dark" v-on:click="selectFeature(timerMode)">Timer Mode</b-button>
+              <b-button variant="dark" v-on:click="selectFeature(waterLog)">Water Log</b-button>
+              <b-button variant="dark" v-on:click="selectFeature(devices)">Devices</b-button>
             </b-button-group>
           </nav>
       </template>
@@ -23,11 +25,19 @@
 </template>
 <script>
     import mdbCard from 'mdbvue';
-    import home from '../HelloWorld.vue';
+    import home from '../home/Home.vue';
+    import autoMode from '../auto mode/AutoMode.vue';
+    import waterLog from '../water log/WaterLog.vue';
+    import timerMode from '../timer mode/TimerMode.vue';
+    import devices from '../device/Devices.vue';
     export default{
         name: 'Menu',
         data(){return{
           home: home,
+          autoMode: autoMode,
+          waterLog: waterLog,
+          timerMode: timerMode,
+          devices: devices
         }},
         components: mdbCard,
         methods: {

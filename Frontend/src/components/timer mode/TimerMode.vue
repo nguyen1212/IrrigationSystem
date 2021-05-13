@@ -1,16 +1,12 @@
 <template>
-  <div class="home">
-    <p>Home</p>
+  <div class="timer-mode">
+    <h2>Implement this file</h2>
+    <p>../components/timer mode/TimerMode.vue</p>
   </div>
 </template>
 <script>
 export default {
-  name: 'home',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
+  name: 'timerMode',
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

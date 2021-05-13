@@ -32,7 +32,6 @@
 <script>
 
 import axios from 'axios';
-import home from './components/HelloWorld.vue';
 import Panel from './components/panel/panel.vue';
 import Menu from './components/menu/menu.vue';
 export default {
