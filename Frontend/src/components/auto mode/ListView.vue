@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import AddModal from "../components/auto mode/AddModal"
+import AddModal from "../auto mode/AddModal"
 export default {
   name: 'ListView',
   components: {

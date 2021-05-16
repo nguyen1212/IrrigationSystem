@@ -1,14 +1,16 @@
 <template>
-    <div>
-    <div class='row'>
-      <div class="col-4">
-      <b-button-group size="sm">
-        <b-button @click="selectView('ListView')"><b-icon icon="view-list"></b-icon></b-button>
-        <b-button @click="selectView('CardView')"><b-icon icon="view-stacked"></b-icon></b-button>
-      </b-button-group>
+    <div >
+    <div class="container">
+        <div class='row mt-4'>
+            <div class="col-4">
+            <b-button-group size="sm">                
+                <b-button @click="selectView('ListView')"><b-icon icon="view-stacked"></b-icon></b-button>
+                <b-button @click="selectView('CardView')"><b-icon icon="view-list" rotate="90"></b-icon></b-button>
+            </b-button-group>
+            </div>
+        </div>
+        <div class="row mt-4"></div>
     </div>
-    </div>
-    
     <component v-bind:is="view" :info="JSON.stringify(this.info)" :selected="1"/>
 
     </div>
@@ -16,8 +18,8 @@
 
 <script>
 // @ is an alias to /src
-import ListView from '../components/auto mode/ListView.vue'
-import CardView from '../components/auto mode/CardView.vue'
+import ListView from '../auto mode/ListView.vue'
+import CardView from '../auto mode/CardView'
 export default {
     data() {
         return {

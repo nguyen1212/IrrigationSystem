@@ -46,8 +46,8 @@ style="width: 800px; height: 500px">
 </template>
 
 <script>
-import Card from "../components/auto mode/Card"
-import AddModal from "../components/auto mode/AddModal"
+import Card from "../auto mode/Card"
+import AddModal from "../auto mode/AddModal"
 export default {
   name: 'ListView',
   data() {
