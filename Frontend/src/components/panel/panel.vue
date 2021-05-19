@@ -2,7 +2,11 @@
   <mdb-card class="card-body" style="width: 100%; ">
     <mdb-card-title>
         <span style="float:left; color: white;">{{currentDateTime()}}</span>
-        <span style="float:right; color: white;">Weather Forcast</span>
+        <span style="float:right; color: white;">
+          <p> User Name
+          <b-button style="float:right;" size="sm" @click="logout"><b-icon icon="power" aria-hidden="true"></b-icon>Logout</b-button>
+          </p>
+        </span>
     </mdb-card-title>
     <div class="flex-row">
       <slides/>
@@ -10,25 +14,36 @@
   </mdb-card>
 </template>
 <script>
-  import { mdbCard, mdbCardTitle, mdbCardText } from 'mdbvue';
+  import { mdbCard, mdbCardTitle } from 'mdbvue';
   import slides from '../panel/slides.vue';
+  import firebase from 'firebase'
   export default {
     name: 'Panel',
     components: {
       mdbCard,
       mdbCardTitle,
-      mdbCardText,
       slides
     },
     methods: {
     currentDateTime() {
       const current = new Date();
       const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
-      const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
-      const dateTime = 'Date: ' + date +'\n'+ 'Time: ' + time;
-      
+      // const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+      // const dateTime = 'Date: ' + date +'\n'+ 'Time: ' + time;
       return 'Date: ' + date;
-    }
+    },
+    logout() {
+            firebase
+                .auth()
+                .signOut()
+                .then(() => {
+                    this.$router.push('/');
+                })
+                .catch(error => {
+                    alert(error.message);
+                    this.$router.push('/');
+                });
+        },
   }
   }
 </script>

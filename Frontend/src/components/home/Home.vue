@@ -1,7 +1,11 @@
 <template>
-  <div class="home">
+  <div class="home" id="home">
     <h1> Implement home in this directory</h1>
     <p>../components/home/Home.vue</p>
+    <p> 
+      <router-link to='/login'> goto login</router-link>
+      <router-link to='/home'> goto home</router-link>
+    </p>
   </div>
 </template>
 <script>

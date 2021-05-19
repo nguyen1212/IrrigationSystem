@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-    import mdbCard from 'mdbvue';
+    import {mdbCard} from 'mdbvue';
     import home from '../home/Home.vue';
     import autoMode from '../auto mode/AutoMode.vue';
     import waterLog from '../water log/WaterLog.vue';
@@ -48,7 +48,6 @@
     }
 </script>
 <style scoped>
-
 .ml-0{
   width: 100%;
 }

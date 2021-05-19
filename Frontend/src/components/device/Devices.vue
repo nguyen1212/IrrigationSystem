@@ -1,7 +1,11 @@
 <template>
   <div class="devices">
-    <h2>Implement this file</h2>
-    <p>../components/devices/Devices.vue</p>
+    <div class="col-6">
+      <p> devices </p>
+    </div>
+    <div class="col">
+      <p> table </p>  
+    </div>
   </div>
 </template>
 <script>
