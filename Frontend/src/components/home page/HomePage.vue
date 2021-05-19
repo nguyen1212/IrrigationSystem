@@ -9,7 +9,7 @@
         <testmenu style="height:100%; width: 100%;" v-on:changefeature="switchFeature"></testmenu>
       </div>
       <div class="col">
-        <component v-bind:is="component" />
+        <component style="height:100%; width: 100%;" v-bind:is="component" />
       </div>
     </div>
     <!-- </div> -->
