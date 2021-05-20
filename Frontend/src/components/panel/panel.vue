@@ -24,6 +24,20 @@
       mdbCardTitle,
       slides
     },
+    data(){ return{
+      ws:null
+    }},
+    created: function(){
+      // var self = this;
+      console.log("Starting connection to WebSocket Server")
+      this.ws = new WebSocket('ws://' + window.location.host + '/devices/ws');
+      // this.ws.addEventListener()
+      this.ws.onopen = function(event) {
+        console.log(event)
+        console.log("Successfully connected to the echo websocket server...")
+      }
+
+    },
     methods: {
     currentDateTime() {
       const current = new Date();
@@ -33,17 +47,26 @@
       return 'Date: ' + date;
     },
     logout() {
-            firebase
-                .auth()
-                .signOut()
-                .then(() => {
-                    this.$router.push('/');
-                })
-                .catch(error => {
-                    alert(error.message);
-                    this.$router.push('/');
-                });
-        },
+      firebase
+          .auth()
+          .signOut()
+          .then(() => {
+              this.$router.push('/');
+          })
+          .catch(error => {
+              alert(error.message);
+              this.$router.push('/');
+          });
+    },
+    send: function(){
+      this.ws.send(
+        JSON.stringify({
+          userId: 'admin@gmail.com',
+          plotId: 'california',
+          state: 'On'
+        })
+      )
+    }
   }
   }
 </script>
