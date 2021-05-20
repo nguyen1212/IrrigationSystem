@@ -31,6 +31,8 @@
               <li ><b>Temperature:</b> {{myinfo.temperatureThreshold}}</li>
               <li ><b>Note:</b> {{myinfo.note}}</li>
             </ul>
+            <b-button variant="dark">Edit</b-button>
+
         </div>
       </b-card-text>
       

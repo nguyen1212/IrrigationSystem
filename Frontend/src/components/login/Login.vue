@@ -109,7 +109,7 @@ export default {
 
 <style scoped>
 .my-container {
-    background-image: url('~@/assets/greenery.jpg');
+    background-image: url('~@/assets/greenery-login-page.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 
@@ -158,7 +158,6 @@ export default {
   background: transparent;
   margin-right: 50px;
 }
-
 .btn {
   font-size: 18px;
   background-color: #00BFA1;

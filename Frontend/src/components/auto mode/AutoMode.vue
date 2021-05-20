@@ -62,7 +62,7 @@ export default {
                 "humidityThreshold": 30,
                 "moistureThreshold": 40,
                 "temperatureThreshold": 20,
-                "img": "",
+                "img": "https://www.thespruceeats.com/thmb/GmFZ-ePJ3mbrcmI-XW3ZHEYslBo=/1674x1674/smart/filters:no_upscale()/bay-leaves-dry-2500-56a210353df78cf772718c1f.jpg",
                 "note": "Bay leaves are delicious"
             }
         ]

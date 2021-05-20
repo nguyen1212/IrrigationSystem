@@ -56,9 +56,11 @@
       <b-row class="border-bottom">
         <b-link class='pt-3 pb-3 row w-100 ml-0' @click="$bvModal.show('mymodal')">
             <b-col class="col-1">
+            <b-icon class="h3 mt-0" icon="plus-circle-fill" style="color: black;" variant="black"></b-icon>
+
             </b-col>
-            <b-col class="leftalign col-3">#</b-col>
-            <b-col class="leftalign col-5 description">#</b-col>
+            <b-col class="leftalign col-3">Add</b-col>
+            <b-col class="leftalign col-5 description">Click to add</b-col>
             <b-col class="pr-2 col-3">
               
             </b-col>

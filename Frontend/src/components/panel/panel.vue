@@ -51,7 +51,8 @@
 <style scoped>
   .card-body{
     max-height: 11cm!important;
-    background-image: url("https://i.picsum.photos/id/159/1024/480.jpg?hmac=6PcKV3l3tqzR177maUXur9a_NlTfrPAyf5PmpvZ5Q6M");
+    background-image: url('~@/assets/greenery-main-page.png');
     background-size: cover;
+    background-position: center;
   }
 </style>
