@@ -153,7 +153,7 @@ export default {
   line-height: 1.2;
   border: none;
   display: block;
-  width: 100%;
+  width: 250px;
   height: 50px;
   background: transparent;
   margin-right: 50px;
