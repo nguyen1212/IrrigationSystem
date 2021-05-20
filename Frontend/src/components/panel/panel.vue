@@ -4,7 +4,7 @@
         <span style="float:left; color: white;">{{currentDateTime()}}</span>
         <span style="float:right; color: white;">
           <p> User Name
-          <b-button style="float:right;" size="sm" @click="send"><b-icon icon="power" aria-hidden="true"></b-icon>Logout</b-button>
+          <b-button style="float:right;" size="sm" @click="logout"><b-icon icon="power" aria-hidden="true"></b-icon>Logout</b-button>
           </p>
         </span>
     </mdb-card-title>
