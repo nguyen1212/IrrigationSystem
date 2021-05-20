@@ -1,6 +1,6 @@
 <template>
-    <div id="app" class="container-fluid h-100">
-        <router-view /></div>
+    
+        <router-view />
 </template>
 
 <script>

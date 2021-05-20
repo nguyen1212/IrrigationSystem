@@ -1,4 +1,5 @@
 <template>
+<div id="app" class="container-fluid h-100">
   <div id="homepage" class="d-flex flex-column h-100 ">
     <!-- <div class="d-flex flex-column h-100 "> -->
     <div class="row ">
@@ -14,6 +15,7 @@
     </div>
     <!-- </div> -->
   </div>
+</div>  
 </template>
 
 <script>
