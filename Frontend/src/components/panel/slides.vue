@@ -29,10 +29,10 @@
             <div class="info" style="display: flex; justify-content: center;">
               <p> {{soiMoisture}}%
               <br> Soil Moisture </p>
-              <!-- <p > {{temp}}C
+              <p > {{temp}}C
               <br> Temperature </p>
               <p > {{humid}}%
-              <br> Humidity </p> -->
+              <br> Humidity </p>
             </div>
           </div>
         </template>

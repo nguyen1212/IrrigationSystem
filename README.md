@@ -1,8 +1,11 @@
 # IrrigationSystem
 
 run server:
-  - cd Server
-  - cmd: go run main.go
+  - cd Services
+  - cmd: go run StaticFile/main.go
+
+  New terminal
+  - cmd: go run Devices/main.go
  
 compile UI (vuejs):
   - cd Frontend

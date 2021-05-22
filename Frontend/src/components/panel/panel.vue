@@ -4,7 +4,7 @@
         <span style="float:left; color: white;">{{currentDateTime()}}</span>
         <span style="float:right; color: white;">
           <p> User Name
-          <b-button id="vm1" style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon>{{this.msg.data}}</b-button>
+          <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon></b-button>
           </p>
           <p v-html='content'></p>
         </span>
@@ -36,7 +36,7 @@
     created: function(){
       var self = this;
       console.log("Starting connection to WebSocket Server")
-      this.ws = new WebSocket('ws://' + window.location.host + '/devices/ws');
+      this.ws = new WebSocket('ws://' + "127.0.0.1:8080" + '/devices/ws');
       // this.ws.addEventListener()
       this.ws.onopen = function(event) {
         console.log(event)
