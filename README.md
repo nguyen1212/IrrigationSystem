@@ -4,8 +4,8 @@ run server:
   - cd Services
   - cmd: go run StaticFile/main.go
 
-New terminal
-run main.go in /Devices
+  New terminal
+  - cmd: go run Devices/main.go
  
 compile UI (vuejs):
   - cd Frontend

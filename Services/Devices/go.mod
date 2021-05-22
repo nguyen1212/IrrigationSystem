@@ -1,4 +1,4 @@
-module github.com/nguyen1212/IrrigationSystem/Services/Devices
+module Devices
 
 go 1.16
 
