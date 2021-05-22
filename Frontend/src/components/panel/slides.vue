@@ -24,7 +24,7 @@
       <b-carousel-slide img-blank>
         <template>
           <div>
-            <div><b-button variant="dark" size="lg" ><b-icon icon="power" aria-hidden="true" scale="2" variant="success"></b-icon></b-button></div>
+            <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" variant="success"></b-icon></b-button></div>
             <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes"></b-form-select></div>
             <div class="info" style="display: flex; justify-content: center;">
               <p> 50%
@@ -45,6 +45,9 @@
 
 <script>
   export default {
+    props: {
+      ws: WebSocket
+    },
     name: 'slides',
     data() {
       return {
@@ -72,6 +75,15 @@
       },
       onSlideEnd() {
         this.sliding = false
+      },
+      send: function(){
+        this.ws.send(
+          JSON.stringify({
+            userId: 'admin@gmail.com',
+            plotId: 'california',
+            state: 'On'
+          })
+        )
       }
     }
   }

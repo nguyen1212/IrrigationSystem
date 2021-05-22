@@ -9,7 +9,7 @@
         </span>
     </mdb-card-title>
     <div class="flex-row">
-      <slides/>
+      <slides v-bind:ws='this.ws'/>
     </div>
   </mdb-card>
 </template>
@@ -59,14 +59,14 @@
           });
     },
     send: function(){
-      this.ws.send(
-        JSON.stringify({
-          userId: 'admin@gmail.com',
-          plotId: 'california',
-          state: 'On'
-        })
-      )
-    }
+        this.ws.send(
+          JSON.stringify({
+            userId: 'admin@gmail.com',
+            plotId: 'california',
+            state: 'On'
+          })
+        )
+      }
   }
   }
 </script>
