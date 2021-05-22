@@ -27,6 +27,8 @@ var (
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
+
+	subChannel	=	make(chan DeviceMsg)
 )
 
 type Message struct {
@@ -59,7 +61,8 @@ func handleWSConnections(w http.ResponseWriter, r *http.Request) {
 	}
 
 	go read(ws, client)
-	write(ws, client)
+	go subSensor(client)
+	write(ws)
 }
 
 func read(ws *websocket.Conn, client mqtt.Client) {
@@ -91,14 +94,23 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 	}
 }
 
-func write(ws *websocket.Conn, client mqtt.Client) {
-	// for {
-	// 	subSensor(client)
-	// 	err := ws.WriteJSON()
-	// 	if err != nil {
-	// 		log.Printf("error: %v", err)
-	// 	}
-	// }
+type WSSendingMsg struct{
+	Name	string	`json:"name"`
+	Data	string	`json:"data"`
+}
+
+func write(ws *websocket.Conn) {
+	adaMsg := <-subChannel
+	sendingMsg := &WSSendingMsg{
+		Name: adaMsg.Name,
+		Data: string(adaMsg.Data),
+	}
+	for {
+		err := ws.WriteJSON(sendingMsg)
+		if err != nil {
+			log.Printf("error: %v", err)
+		}
+	}
 }
 
 //Create a new client that connect to Adafruit via MQTT (Port 1883)
@@ -130,6 +142,7 @@ func subSensor(client mqtt.Client) {
 func HandleReceivedMsg(client mqtt.Client, msg mqtt.Message) {
 	var sensorMsg DeviceMsg
 	json.Unmarshal(msg.Payload(), &sensorMsg)
+	subChannel<-sensorMsg
 }
 
 func publish(client mqtt.Client, msg *DeviceMsg) {
