@@ -24,15 +24,15 @@
       <b-carousel-slide img-blank>
         <template>
           <div>
-            <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" variant="success"></b-icon></b-button></div>
+            <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" variant="success"></b-icon>{{buttonVariant}}</b-button></div>
             <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes"></b-form-select></div>
             <div class="info" style="display: flex; justify-content: center;">
-              <p> 50%
+              <p> {{soiMoisture}}%
               <br> Soil Moisture </p>
-              <p > 50'C
+              <!-- <p > {{temp}}C
               <br> Temperature </p>
-              <p > 50'C
-              <br> Temperature </p>
+              <p > {{humid}}%
+              <br> Humidity </p> -->
             </div>
           </div>
         </template>
@@ -46,7 +46,11 @@
 <script>
   export default {
     props: {
-      ws: WebSocket
+      ws: WebSocket,
+      buttonVariant: String,
+      soiMoisture: '',
+      temp: '',
+      humid: '',
     },
     name: 'slides',
     data() {
@@ -81,7 +85,8 @@
           JSON.stringify({
             userId: 'admin@gmail.com',
             plotId: 'california',
-            state: 'On'
+            name: 'RELAY',
+            data: '0'
           })
         )
       }

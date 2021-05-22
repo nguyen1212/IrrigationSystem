@@ -4,12 +4,13 @@
         <span style="float:left; color: white;">{{currentDateTime()}}</span>
         <span style="float:right; color: white;">
           <p> User Name
-          <b-button style="float:right;" class="ml-3" size="sm" @click="logout"><b-icon icon="power" aria-hidden="true"></b-icon>Logout</b-button>
+          <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon></b-button>
           </p>
+          <p v-html='content'></p>
         </span>
     </mdb-card-title>
     <div class="flex-row">
-      <slides v-bind:ws='this.ws'/>
+      <slides v-bind:ws='this.ws' :buttonVariant='this.buttonVariant'/>
     </div>
   </mdb-card>
 </template>
@@ -25,10 +26,15 @@
       slides
     },
     data(){ return{
-      ws:null
+      ws:null,
+      msg: Object,
+      buttonVariant: '',
+      soiMoisture: '',
+      temp: '',
+      humid: '',
     }},
     created: function(){
-      // var self = this;
+      var self = this;
       console.log("Starting connection to WebSocket Server")
       this.ws = new WebSocket('ws://' + window.location.host + '/devices/ws');
       // this.ws.addEventListener()
@@ -36,9 +42,23 @@
         console.log(event)
         console.log("Successfully connected to the echo websocket server...")
       }
+      this.ws.addEventListener('message', function(e){
+        var msg = JSON.parse(e.data);
+        if (msg.name == 'SOIL')
+          this.soiMoisture = msg.data
+      })
 
     },
+    mounted: function () {
+      window.setInterval(() => {
+        this.changeValue()
+      }, 500)
+    },
     methods: {
+    changeValue(){
+      this.buttonVariant = 'success'
+
+    },
     currentDateTime() {
       const current = new Date();
       const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
@@ -58,15 +78,6 @@
               this.$router.push('/');
           });
     },
-    send: function(){
-        this.ws.send(
-          JSON.stringify({
-            userId: 'admin@gmail.com',
-            plotId: 'california',
-            state: 'On'
-          })
-        )
-      }
   }
   }
 </script>

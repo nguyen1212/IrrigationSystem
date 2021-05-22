@@ -11,7 +11,6 @@ import (
 )
 
 var clients = make(map[*websocket.Conn]bool)
-var testClients = make(map[string]bool)
 var upgrader = websocket.Upgrader{}
 
 // var broadcast = make(chan forceMode)
@@ -24,7 +23,7 @@ func main() {
 	fs := http.FileServer(http.Dir("../Frontend/dist"))
 	http.Handle("/", fs)
 
-	// go sendInfo()
+	go handleForceModeData()
 
 	fmt.Println("Server listening on port 8081")
 	log.Panic(
@@ -52,7 +51,7 @@ type screenshotAPIRequest struct {
 type forceMode struct {
 	UserId string `json:"userId"`
 	PlotId string `json:"plotId"`
-	State  string `json:"state"`
+	Data   int    `json:"data"`
 }
 
 func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
@@ -121,5 +120,25 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 		err := ws.ReadJSON(&msg) // decode json to msg variable
 		checkError(err)
 		fmt.Println(msg.PlotId)
+	}
+}
+
+func handleForceModeData() {
+	data := 1
+	for {
+		if data > 1 {
+			data = 0
+		}
+
+		for client := range clients {
+			msg := forceMode{
+				UserId: "none",
+				PlotId: "none",
+				Data:   data,
+			}
+			err := client.WriteJSON(msg)
+			checkError(err)
+		}
+		data++
 	}
 }
