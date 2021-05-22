@@ -24,7 +24,7 @@
       <b-carousel-slide img-blank>
         <template>
           <div>
-            <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" variant="success"></b-icon>{{buttonVariant}}</b-button></div>
+            <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" variant="success"></b-icon></b-button></div>
             <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes"></b-form-select></div>
             <div class="info" style="display: flex; justify-content: center;">
               <p> {{soiMoisture}}%

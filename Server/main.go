@@ -126,10 +126,6 @@ func handleConnection(w http.ResponseWriter, r *http.Request) {
 func handleForceModeData() {
 	data := 1
 	for {
-		if data > 1 {
-			data = 0
-		}
-
 		for client := range clients {
 			msg := forceMode{
 				UserId: "none",

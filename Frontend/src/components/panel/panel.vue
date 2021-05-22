@@ -4,13 +4,13 @@
         <span style="float:left; color: white;">{{currentDateTime()}}</span>
         <span style="float:right; color: white;">
           <p> User Name
-          <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon></b-button>
+          <b-button id="vm1" style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon>{{this.msg.data}}</b-button>
           </p>
           <p v-html='content'></p>
         </span>
     </mdb-card-title>
     <div class="flex-row">
-      <slides v-bind:ws='this.ws' :buttonVariant='this.buttonVariant'/>
+      <slides v-bind:ws='this.ws' :buttonVariant='this.buttonVariant' :soiMoisture="this.msg.data"/>
     </div>
   </mdb-card>
 </template>
@@ -29,7 +29,7 @@
       ws:null,
       msg: Object,
       buttonVariant: '',
-      soiMoisture: '',
+      soilMoisture: '',
       temp: '',
       humid: '',
     }},
@@ -44,21 +44,12 @@
       }
       this.ws.addEventListener('message', function(e){
         var msg = JSON.parse(e.data);
-        if (msg.name == 'SOIL')
-          this.soiMoisture = msg.data
+        self.msg = msg
       })
 
     },
-    mounted: function () {
-      window.setInterval(() => {
-        this.changeValue()
-      }, 500)
-    },
     methods: {
-    changeValue(){
-      this.buttonVariant = 'success'
 
-    },
     currentDateTime() {
       const current = new Date();
       const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
