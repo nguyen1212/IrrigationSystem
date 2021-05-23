@@ -28,15 +28,15 @@ var (
 		WriteBufferSize: 1024,
 	}
 
-	subChannel	=	make(chan DeviceMsg)
+	subChannel = make(chan DeviceMsg)
 )
 
 type Message struct {
 	UserID string `json:"userId"`
 	PlotID string `json:"plotId"`
-	Name  string `json:"name"`
-	Data  string `json:"data"`
-}	
+	Name   string `json:"name"`
+	Data   string `json:"data"`
+}
 
 type DeviceMsg struct {
 	Id   string `json:"id"`
@@ -73,7 +73,7 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 		var msg Message
 		var adaMsg *DeviceMsg
 		// Read in a new message as JSON and map it to a Message object
-		err	:=	ws.ReadJSON(&msg)
+		err := ws.ReadJSON(&msg)
 		if err != nil {
 			log.Fatal(err)
 			continue
@@ -98,14 +98,15 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 }
 
 func write(ws *websocket.Conn) {
-	adaMsg := <-subChannel
-	sendingMsg := &Message{
-		UserID: "0", 				//handle latter
-		PlotID: "1",				//handle latter
-		Name:   adaMsg.Name,
-		Data: fmt.Sprint(adaMsg.Data),
-	}
+	// adaMsg := <-subChannel
 	for {
+		adaMsg := <-subChannel
+		sendingMsg := &Message{
+			UserID: "0", //handle latter
+			PlotID: "1", //handle latter
+			Name:   adaMsg.Name,
+			Data:   fmt.Sprint(adaMsg.Data),
+		}
 		err := ws.WriteJSON(sendingMsg)
 		if err != nil {
 			log.Printf("error: %v", err)
@@ -121,7 +122,7 @@ func createClient() mqtt.Client {
 	// Username of Adafruit account -> For demo only
 	opts.SetUsername("MDPSmartFarm")
 	// Key of Adafruit account: Get from MyKey tab -> For demo only
-	opts.SetPassword("aio_ToMD71VpJdJU8T6G38E138tIDZwC")
+	opts.SetPassword("aio_vCvC63MLzQ39AInFEVQXOk5dlSN5")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
@@ -142,7 +143,8 @@ func subSensor(client mqtt.Client) {
 func HandleReceivedMsg(client mqtt.Client, msg mqtt.Message) {
 	var sensorMsg DeviceMsg
 	json.Unmarshal(msg.Payload(), &sensorMsg)
-	subChannel<-sensorMsg
+	subChannel <- sensorMsg
+
 }
 
 func publish(client mqtt.Client, msg *DeviceMsg) {
@@ -157,9 +159,8 @@ func main() {
 	http.HandleFunc("/devices/ws", handleWSConnections)
 
 	fmt.Println("Server listening on port 8080")
-	err	:=	http.ListenAndServe(":8080", nil)
-	if err	!= nil{
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
 		log.Fatal(err)
 	}
 }
-

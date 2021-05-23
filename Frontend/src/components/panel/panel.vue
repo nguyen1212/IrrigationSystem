@@ -4,13 +4,13 @@
         <span style="float:left; color: white;">{{currentDateTime()}}</span>
         <span style="float:right; color: white;">
           <p> User Name
-          <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon></b-button>
+          <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon>Log out</b-button>
           </p>
           <p v-html='content'></p>
         </span>
     </mdb-card-title>
     <div class="flex-row">
-      <slides v-bind:ws='this.ws' :buttonVariant='this.buttonVariant' :soiMoisture="this.msg.data"/>
+      <slides v-bind:ws='this.ws' :forcemode='this.forcemode' :soil="this.soil" :temp="this.temp" :humid="this.humid"/>
     </div>
   </mdb-card>
 </template>
@@ -28,8 +28,8 @@
     data(){ return{
       ws:null,
       msg: Object,
-      buttonVariant: '',
-      soilMoisture: '',
+      forcemode: '',
+      soil: '',
       temp: '',
       humid: '',
     }},
@@ -45,11 +45,25 @@
       this.ws.addEventListener('message', function(e){
         var msg = JSON.parse(e.data);
         self.msg = msg
+        self.classifyMsg(msg)
       })
 
     },
     methods: {
-
+    classifyMsg(msg){
+      if (msg.name == 'SOIL') this.soil = msg.data
+      if (msg.name == 'TEMP-HUMID'){
+        var data = msg.data.split("-")
+        this.temp = data[0]
+        this.humid = data[1]
+      }
+      if (msg.name == 'RELAY'){
+        if (msg.data == '1')
+          this.forcemode = 'success'
+        else
+          this.forcemode = 'danger'
+      }
+    },
     currentDateTime() {
       const current = new Date();
       const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();

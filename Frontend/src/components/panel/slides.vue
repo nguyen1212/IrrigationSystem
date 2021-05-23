@@ -24,12 +24,12 @@
       <b-carousel-slide img-blank>
         <template>
           <div>
-            <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" variant="success"></b-icon></b-button></div>
+            <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" v-bind:variant="forcemode"></b-icon></b-button></div>
             <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes"></b-form-select></div>
             <div class="info" style="display: flex; justify-content: center;">
-              <p> {{soiMoisture}}%
+              <p> {{soil}}%
               <br> Soil Moisture </p>
-              <p > {{temp}}C
+              <p > {{temp + '&deg;'}}C
               <br> Temperature </p>
               <p > {{humid}}%
               <br> Humidity </p>
@@ -47,8 +47,8 @@
   export default {
     props: {
       ws: WebSocket,
-      buttonVariant: String,
-      soiMoisture: '',
+      forcemode: '',
+      soil: '',
       temp: '',
       humid: '',
     },
@@ -80,7 +80,15 @@
       onSlideEnd() {
         this.sliding = false
       },
-      send: function(){
+      toggle(mode){
+        if (mode == 'success')
+          return 'danger'
+        else
+          return 'success'
+      },
+      send(){
+        var self = this
+        self.forcemode = this.toggle(self.forcemode)
         this.ws.send(
           JSON.stringify({
             userId: 'admin@gmail.com',
@@ -89,7 +97,7 @@
             data: '0'
           })
         )
-      }
+      },
     }
   }
 </script>
