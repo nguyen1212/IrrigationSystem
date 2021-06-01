@@ -10,7 +10,9 @@
         <testmenu style="height:100%; width: 100%;" v-on:changefeature="switchFeature"></testmenu>
       </div>
       <div class="col">
-        <component style="height:100%; width: 100%;" v-bind:is="component" />
+        <keep-alive>
+          <component style="height:100%; width: 100%;" v-bind:is="component" />
+        </keep-alive>
       </div>
     </div>
     <!-- </div> -->

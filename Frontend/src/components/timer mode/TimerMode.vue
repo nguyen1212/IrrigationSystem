@@ -50,8 +50,63 @@
               <b-button v-b-modal.repeat-box style="background-color: #ffffff; border-color: #ffffff">
                 <img style = "width: 25px" src="./plus_icon.png"/>
               </b-button>
-              <b-modal id="repeat-box">Hello From My Modal!</b-modal>
+              <b-modal
+              id="repeat-box"
+              title="Add new preset"
+              button-size="md"
+              @show="resetModal"
+              @hidden="resetModal"
+              @ok="handleSubmit"
+              >
+              <div class="d-block text-center">
+                <b-form v-if="show">
+                  <b-form-group id="input-preset" label="Preset Name" label-for="input-preset">
+                    <b-form-input
+                      id="input-preset"
+                      v-model="form.label"
+                      placeholder="Enter name"
+                      required
+                    />
+                  </b-form-group>
+
+                  <b-form-group id="input-preset" label="Time" label-for="input-preset">
+                    <b-form-input
+                      id="input-preset"
+                      v-model="form.time"
+                      placeholder="Enter time"
+                      required
+                    />
+                  </b-form-group>
+
+                  <b-form-group id="input-preset" label="Watered In" label-for="input-preset">
+                    <b-form-spinbutton 
+                      v-model="form.wateredInValue"
+                      :formatter-fn="wateredInFormatter"
+                      min="0"
+                      max="4"
+                      wrap
+                    />
+                  </b-form-group>
+
+                  <b-form-group id="input-preset" label="Repeat" label-for="input-preset">
+                    <b-form-spinbutton 
+                      v-model="form.repeatValue"
+                      :formatter-fn="repeatFormatter"
+                      min="0"
+                      max="6"
+                      wrap
+                    />
+                  </b-form-group>
+                </b-form>
             </div>
+            <template #modal-footer="{ ok, cancel }">
+              <b-button variant="success" @click="ok()">
+                Submit
+              </b-button>
+              <b-button variant="danger" @click="cancel()">
+                Cancel
+              </b-button>
+            </template>
           </b-card-text>
           <hr style="margin-top: 1rem" width="100%" size= "5px" align="center"/>
 
@@ -74,9 +129,6 @@
             </div>
             <hr style="margin-top: 1rem" width="100%" size= "5px" align="center"/>
           </b-card-text>
-
-          <a href="#" class="card-link">Card link</a>
-          <b-link href="#" class="card-link">Another link</b-link>
         </b-tab>
       </b-tabs>
     </b-card>
@@ -91,12 +143,46 @@ export default {
         intervalValue: 0,
         interval: ['1 hours', '2 hours','3 hours','4 hours','5 hours','6 hours','7 hours','8 hours','9 hours','10 hours','11 hours','12 hours','13 hours','14 hours','15 hours','16 hours','17 hours','18 hours','19 hours','20 hours','21 hours','22 hours','23 hours', '24 hours'],
         switchValue1: false,
-        switchValue2: true
+        switchValue2: true,
+        form:{
+          label: '',
+          time: '',
+          wateredInValue: 0,
+          wateredIn:['5 mins', '10 mins', '15 mins', '20 mins', '30 mins'],
+          repeatValue: 0,
+          repeat:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday' , 'Saturday' , 'Sunday'],
+        },
+        showModal: false,
       }
     },
     methods: {
       intervalFormatter(intervalValue) {
         return this.interval[intervalValue]
+      },
+      wateredInFormatter(wateredInValue) {
+        return this.form.wateredIn[wateredInValue]
+      },
+      repeatFormatter(repeatValue) {
+        return this.form.repeat[repeatValue]
+      },
+      show() {
+        this.showModal = true
+      },
+      hide(){
+        this.showModal = false
+      },
+      resetModal(){
+        this.resetForm()
+      },
+      resetForm()
+      {
+        this.form.name=""
+        this.form.time=""
+        this.form.wateredInValue=0
+        this.form.repeatValue=0
+      },
+      handleSubmit() {
+        
       }
     }
 }

@@ -6,13 +6,25 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/websocket"
 )
 
+var clients = make(map[*websocket.Conn]bool)
+var testClients = make(map[string]bool)
+var upgrader = websocket.Upgrader{}
+
+// var broadcast = make(chan forceMode)
+
 func main() {
+	http.HandleFunc("/devices/ws", handleConnection)
 	http.HandleFunc("/api/thumbnail", thumbnailHandler)
+	http.HandleFunc("/api/homepage", homePageHandler)
 
 	fs := http.FileServer(http.Dir("../Frontend/dist"))
 	http.Handle("/", fs)
+
+	// go sendInfo()
 
 	fmt.Println("Server listening on port 8081")
 	log.Panic(
@@ -35,6 +47,12 @@ type screenshotAPIRequest struct {
 	Width          int    `json:"width"`
 	Height         int    `json:"height"`
 	ThumbnailWidth int    `json:"thumbnail_width"`
+}
+
+type forceMode struct {
+	UserId string `json:"userId"`
+	PlotId string `json:"plotId"`
+	State  string `json:"state"`
 }
 
 func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
@@ -88,5 +106,20 @@ func thumbnailHandler(w http.ResponseWriter, r *http.Request) {
 func checkError(err error) {
 	if err != nil {
 		log.Panic(err)
+	}
+}
+
+func handleConnection(w http.ResponseWriter, r *http.Request) {
+	ws, err := upgrader.Upgrade(w, r, nil) // upgrade to websocket connection
+	checkError(err)
+
+	defer ws.Close()
+
+	clients[ws] = true
+	for {
+		var msg forceMode
+		err := ws.ReadJSON(&msg) // decode json to msg variable
+		checkError(err)
+		fmt.Println(msg.PlotId)
 	}
 }
