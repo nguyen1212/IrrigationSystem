@@ -14,7 +14,7 @@
       <b-carousel-slide caption="Select Plot" img-blank>
         <template>
             <div>
-                <b-form-select style="width: 60%" v-model="selectedPlot" :options="plots"></b-form-select>
+                <b-form-select style="width: 60%" v-model="selectedPlot" :options="plots" @change="switchPlot(selectedPlot)"></b-form-select>
             </div>
         </template>
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -47,27 +47,29 @@
   export default {
     props: {
       ws: WebSocket,
-      forcemode: '',
       soil: '',
       temp: '',
       humid: '',
+      
     },
     name: 'slides',
     data() {
       return {
         slide: 0,
         sliding: null,
+        forceData: '',
+        forcemode: '',
         selectedPlot: null,
         selectedMode: null,
         plots: [
-          { value: null, text: 'Please select an option' },
-          { value: '1', text: 'NewYork' },
-          { value: '2', text: 'London' },
+          { value: 'none', text: 'Please select an option' },
+          { value: 'New York', text: 'New York' },
+          { value: 'California', text: 'California' },
           { value: '3', text: 'Beijing' },
           { value: '4', text: 'Add...'}
         ],
         modes: [
-          {value: null, text: 'Select Mode' },
+          {value: 'none', text: 'Select Mode' },
           {value: 'auto', text: 'Auto Mode'},
           {value: 'manual', text: 'Manual Mode'}
         ]
@@ -89,15 +91,22 @@
       send(){
         var self = this
         self.forcemode = this.toggle(self.forcemode)
+        if (self.forcemode == 'success')
+          self.forceData = '0'
+        else
+          self.forceData = '1'
         this.ws.send(
           JSON.stringify({
             userId: 'admin@gmail.com',
-            plotId: 'california',
+            plotId: 'newyork',
             name: 'RELAY',
-            data: '0'
+            data: self.forceData
           })
         )
       },
+      switchPlot(selectedPlot){
+        this.$emit('plotSelection', selectedPlot)
+      }
     }
   }
 </script>

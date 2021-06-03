@@ -122,7 +122,7 @@ func createClient() mqtt.Client {
 	// Username of Adafruit account -> For demo only
 	opts.SetUsername("MDPSmartFarm")
 	// Key of Adafruit account: Get from MyKey tab -> For demo only
-	opts.SetPassword("aio_vCvC63MLzQ39AInFEVQXOk5dlSN5")
+	opts.SetPassword("aio_hTES03bizhmCK7SiCw8A071FH1j9")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
@@ -159,8 +159,10 @@ func main() {
 	http.HandleFunc("/devices/ws", handleWSConnections)
 
 	fmt.Println("Server listening on port 8080")
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal(err)
+	for {
+		err := http.ListenAndServe(":8080", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }

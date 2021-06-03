@@ -10,7 +10,7 @@
         </span>
     </mdb-card-title>
     <div class="flex-row">
-      <slides v-bind:ws='this.ws' :forcemode='this.forcemode' :soil="this.soil" :temp="this.temp" :humid="this.humid"/>
+      <slides v-on="$listeners" v-bind:ws='this.ws' :soil="this.soil" :temp="this.temp" :humid="this.humid"/>
     </div>
   </mdb-card>
 </template>
@@ -28,7 +28,6 @@
     data(){ return{
       ws:null,
       msg: Object,
-      forcemode: '',
       soil: '',
       temp: '',
       humid: '',
@@ -56,12 +55,6 @@
         var data = msg.data.split("-")
         this.temp = data[0]
         this.humid = data[1]
-      }
-      if (msg.name == 'RELAY'){
-        if (msg.data == '1')
-          this.forcemode = 'success'
-        else
-          this.forcemode = 'danger'
       }
     },
     currentDateTime() {

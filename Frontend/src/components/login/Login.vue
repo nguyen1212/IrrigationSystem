@@ -1,34 +1,4 @@
 <template>
-    <!-- <div>
-        <form @submit.prevent="login">
-            <h2>Login</h2>
-            <input
-                type="email"
-                placeholder="Email address..."
-                v-model="email"
-            />
-            <input
-                type="password"
-                placeholder="password..."
-                v-model="password"
-            />
-            <button type="submit">Login</button>
-        </form>
-    </div> -->
-    <!-- <div 
-    class="d-flex flex-column h-100 justify-content-center" >    
-    <div class="row align-self-center justify-content-center wrap-login-form-title">
-        <div>
-        Account Login
-        </div>
-    </div>
-    <div class="row align-self-center justify-content-center">
-        <div class=" wrap-login-form-modal">
-        One of three columns
-        </div>
-    </div>
-    </div> -->
-
 <div class="w-100 h-100 container my-container" style="">
     <div class="row justify-content-center" style="min-height: 100vh;">
     <div 
@@ -89,9 +59,6 @@ export default {
         };
     },
     methods: {
-        test(){
-            this.$router.push('/homepage');
-        },
         login() {
             firebase
                 .auth()
