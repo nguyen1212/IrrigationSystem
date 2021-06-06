@@ -59,14 +59,14 @@
         sliding: null,
         forceData: '',
         forcemode: '',
-        selectedPlot: null,
-        selectedMode: null,
+        selectedPlot: '',
+        selectedMode: '',
         plots: [
-          { value: 'none', text: 'Please select an option' },
+          { value: '', text: 'Please select an option' },
           { value: 'New York', text: 'New York' },
           { value: 'California', text: 'California' },
-          { value: '3', text: 'Beijing' },
-          { value: '4', text: 'Add...'}
+          { value: '', text: 'Beijing' },
+          { value: '', text: 'Add...'}
         ],
         modes: [
           {value: 'none', text: 'Select Mode' },

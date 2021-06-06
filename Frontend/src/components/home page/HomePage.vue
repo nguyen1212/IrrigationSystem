@@ -27,8 +27,6 @@ export default {
   name: 'HomePage',
 
   data() { return {
-    websiteUrl: '',
-    thumbnailUrl: '',
     component: '',
     UserId: 'pod-yone',
     PlotId: '',

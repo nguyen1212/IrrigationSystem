@@ -32,51 +32,55 @@
       temp: '',
       humid: '',
     }},
-    created: function(){
-      var self = this;
-      console.log("Starting connection to WebSocket Server")
-      this.ws = new WebSocket('ws://' + "127.0.0.1:8080" + '/devices/ws');
-      // this.ws.addEventListener()
-      this.ws.onopen = function(event) {
-        console.log(event)
-        console.log("Successfully connected to the echo websocket server...")
-      }
-      this.ws.addEventListener('message', function(e){
-        var msg = JSON.parse(e.data);
-        self.msg = msg
-        self.classifyMsg(msg)
-      })
-
-    },
+    created: function(){this.connect()},
     methods: {
-    classifyMsg(msg){
-      if (msg.name == 'SOIL') this.soil = msg.data
-      if (msg.name == 'TEMP-HUMID'){
-        var data = msg.data.split("-")
-        this.temp = data[0]
-        this.humid = data[1]
+      classifyMsg(msg){
+        if (msg.name == 'SOIL') this.soil = msg.data
+        if (msg.name == 'TEMP-HUMID'){
+          var data = msg.data.split("-")
+          this.temp = data[0]
+          this.humid = data[1]
+        }
+    },
+      currentDateTime() {
+        const current = new Date();
+        const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
+        // const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+        // const dateTime = 'Date: ' + date +'\n'+ 'Time: ' + time;
+        return 'Date: ' + date;
+      },
+      logout() {
+        firebase
+            .auth()
+            .signOut()
+            .then(() => {
+                this.$router.push('/');
+            })
+            .catch(error => {
+                alert(error.message);
+                this.$router.push('/');
+            });
+      },
+      connect(){
+        var self = this;
+        console.log("Starting connection to WebSocket Server")
+        var url = 'ws://' + "127.0.0.1:8080" + '/devices/ws'
+        this.ws = new WebSocket(url);
+        // this.ws.addEventListener()
+        this.ws.onopen = function(event) {
+          console.log(event)
+          console.log("Successfully connected to the echo websocket server...")
+        }
+        this.ws.addEventListener('message', function(e){
+          var msg = JSON.parse(e.data);
+          self.msg = msg
+          self.classifyMsg(msg)
+        })
+        this.ws.addEventListener('close', function(e){
+          self.ws.close()}
+        )
       }
     },
-    currentDateTime() {
-      const current = new Date();
-      const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
-      // const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
-      // const dateTime = 'Date: ' + date +'\n'+ 'Time: ' + time;
-      return 'Date: ' + date;
-    },
-    logout() {
-      firebase
-          .auth()
-          .signOut()
-          .then(() => {
-              this.$router.push('/');
-          })
-          .catch(error => {
-              alert(error.message);
-              this.$router.push('/');
-          });
-    },
-  }
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

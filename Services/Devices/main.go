@@ -1,13 +1,17 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
+	"irrigation.com/Services/Devices/data"
 )
 
 var (
@@ -46,16 +50,15 @@ type DeviceMsg struct {
 }
 
 func handleWSConnections(w http.ResponseWriter, r *http.Request) {
+
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	defer ws.Close()
-
 	log.Println("Websocket formed!")
-
+	defer ws.Close()
 	//Create a new connection to Adafruit Server
 	client := createClient()
 
@@ -66,6 +69,7 @@ func handleWSConnections(w http.ResponseWriter, r *http.Request) {
 	go read(ws, client)
 	go subSensor(client)
 	write(ws)
+
 }
 
 func read(ws *websocket.Conn, client mqtt.Client) {
@@ -76,7 +80,7 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 		err := ws.ReadJSON(&msg)
 		if err != nil {
 			log.Fatal(err)
-			continue
+			return
 		}
 		if msg.Data == "1" {
 			adaMsg = &DeviceMsg{
@@ -122,7 +126,7 @@ func createClient() mqtt.Client {
 	// Username of Adafruit account -> For demo only
 	opts.SetUsername("MDPSmartFarm")
 	// Key of Adafruit account: Get from MyKey tab -> For demo only
-	opts.SetPassword("aio_hTES03bizhmCK7SiCw8A071FH1j9")
+	opts.SetPassword("aio_cVXK77XNdunIf05eYMDZOY3r0UZ7")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
@@ -154,15 +158,41 @@ func publish(client mqtt.Client, msg *DeviceMsg) {
 	token.Wait()
 }
 
+func checkError(err error) {
+	if err != nil {
+		log.Panic(err)
+	}
+}
+
+func dbConnect() (*sql.DB, error) {
+	db, err := sql.Open("mysql", "root:trannguyen121223@tcp(127.0.0.1:3306)/device_database")
+	if err != nil {
+		return db, err
+	}
+	return db, nil
+}
+
+func addRouter(r *mux.Router) *mux.Router {
+	r.HandleFunc("/devices/ws", handleWSConnections)
+	return r
+}
+
 func main() {
-	// Create new Websocket to client
-	http.HandleFunc("/devices/ws", handleWSConnections)
+
+	db, err := dbConnect()
+	checkError(err)
+	fmt.Println("Database successfully connected")
+	defer db.Close()
+
+	dataServer := &data.Data{
+		Router:   mux.NewRouter().StrictSlash(true),
+		Database: db,
+	}
+
+	dataServer.SetupRouter()
+	r := addRouter(dataServer.Router)
 
 	fmt.Println("Server listening on port 8080")
-	for {
-		err := http.ListenAndServe(":8080", nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
+	e := http.ListenAndServe(":8080", r)
+	checkError(e)
 }
