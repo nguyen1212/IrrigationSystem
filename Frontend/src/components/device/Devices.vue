@@ -1,16 +1,16 @@
 <template>
   <div class="devices">
     <div class="row">
-      <div id="chart" ref="chart" class="col-8" >
+      <div class="col-8" >
         <apexchart type="area" height="400"  :options="chartOptions" :series="series"></apexchart>
       </div>
       <div class="col">
         <p> Device Information </p>
         <div> Type: <b-form-select style="width: 50%" v-model="selectedType" :options="types"></b-form-select></div>
-        <div> Type: <b-form-select style="width: 50%" v-model="selectedDevice" :options="selectedDeviceList" ></b-form-select></div>
-        <p>{{selectedDevice}}</p>
+        <div> Name: <b-form-select style="width: 50%" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedDevice === ''"></b-form-select></div>
+         <b-button style="float:right;" class="ml-3" size="sm" @click="getDeviceDataMeasurement('','','','')" >Log out</b-button>
         <hr/>
-        <p> Device Type </p>
+        <p> Statistics </p>
       </div>
     </div>
   </div>
@@ -124,12 +124,12 @@ export default {
         window.alert(`The Database Server returned an error: ${error}`);
       })
     },
-    plotData(deviceName, start_time, end_time){
+    getDeviceDataMeasurement(deviceName, type, start_time, end_time){
       axios.post("http://localhost:8080/devices/data/log", {
         start_time: "2021-05-04T02:45:00Z",
         end_time: "2021-06-04T13:47:00Z",
         deviceName: 'SOIL',
-        type: 'soilmoist'
+        type: 'soil'
       })
       .then((response)=>{
         this.deviceData = response.data.Data
@@ -146,7 +146,7 @@ export default {
     PlotId: function(newVal){
       this.PlotId = newVal
       this.items = []
-      this.getDevice()
+      // this.getDevice()
     },
     selectedType: function(newType){
       this.selectedType = newType

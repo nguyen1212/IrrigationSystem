@@ -126,7 +126,7 @@ func createClient() mqtt.Client {
 	// Username of Adafruit account -> For demo only
 	opts.SetUsername("MDPSmartFarm")
 	// Key of Adafruit account: Get from MyKey tab -> For demo only
-	opts.SetPassword("aio_cVXK77XNdunIf05eYMDZOY3r0UZ7")
+	opts.SetPassword("aio_GCxm39Wlnp055nAKNbnk73MdOUK1")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
