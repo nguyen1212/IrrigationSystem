@@ -5,12 +5,25 @@
         <apexchart type="area" height="400"  :options="chartOptions" :series="series"></apexchart>
       </div>
       <div class="col">
-        <p> Device Information </p>
-        <div> Type: <b-form-select style="width: 50%" v-model="selectedType" :options="types"></b-form-select></div>
-        <div> Name: <b-form-select style="width: 50%" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedDevice === ''"></b-form-select></div>
-         <b-button style="float:right;" class="ml-3" size="sm" @click="getDeviceDataMeasurement('','','','')" >Log out</b-button>
+        <p> <strong> Device Information </strong></p>
+        <div style="width: 100%; ">
+        <div>
+          <p>Type: <b-form-select style="width: 80%; float: right;" v-model="selectedType" :options="types"></b-form-select></p>
+        </div>
+        <div>
+          <p>Name: <b-form-select style="width: 80%; float: right;" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedType === null"></b-form-select></p>
+        </div>
+        <div>
+          <p>Date: <b-form-datepicker style="width: 80%; float: right;" id="ex-disabled-readonly" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
+        </div>
+        </div>
+        <br>
         <hr/>
-        <p> Statistics </p>
+        <p> <strong> Statistics </strong> </p>
+        <div style="float: left">
+        <p> Average: {{this.avg}}</p>
+        <p> Highest: {{this.max}} - {{this.maxTime}}</p>
+        <p> Lowest: {{this.min}} - {{this.minTime}}<p></div>
       </div>
     </div>
   </div>
@@ -31,6 +44,12 @@ export default {
   data() {
     {
       return {
+        avg: '',
+        max: '',
+        maxTime: '',
+        min: '',
+        minTime: '',
+        date: '',
         start_time: '',
         end_time: '',
         deviceName: '',
@@ -97,7 +116,7 @@ export default {
           xaxis: {
             type: 'datetime',
             title: {
-              text: 'Date&Time Interval'
+              text: 'Time Interval'
             },
           },
           tooltip: {
@@ -124,15 +143,22 @@ export default {
         window.alert(`The Database Server returned an error: ${error}`);
       })
     },
-    getDeviceDataMeasurement(deviceName, type, start_time, end_time){
+    getDeviceDataMeasurement(){
+      var self = this
       axios.post("http://localhost:8080/devices/data/log", {
-        start_time: "2021-05-04T02:45:00Z",
-        end_time: "2021-06-04T13:47:00Z",
+        start_time: self.start_time,
+        end_time: self.end_time,
         deviceName: 'SOIL',
-        type: 'soil'
+        type: self.selectedType
       })
       .then((response)=>{
         this.deviceData = response.data.Data
+        this.min = response.data.min
+        this.max = response.data.max
+        this.avg = response.data.avg
+        this.maxTime = new Date(response.data.maxTime).toISOString().split("T")[1]
+        this.minTime = new Date(response.data.minTime).toISOString().split("T")[1]
+        console.log(response.data.Data)
         this.series = [{
           data: response.data.Data
         }]
@@ -140,6 +166,11 @@ export default {
       .catch((error)=>{
         window.alert(`Cannot plot data due to error: ${error}`)
       })
+    },
+    clearPlotData(){
+      this.series = [{
+          data: []
+      }]
     }
   },
   watch:{
@@ -150,12 +181,30 @@ export default {
     },
     selectedType: function(newType){
       this.selectedType = newType
+      this.clearPlotData()
       if (newType == 'soil')
         this.selectedDeviceList = this.soilDevices
       else if (newType == 'temp')
         this.selectedDeviceList = this.tempDevices
       else
         this.selectedDeviceList = this.humidDevices
+    },
+    selectedDevice: function(newDevice){
+      this.selectedDevice = newDevice
+      this.clearPlotData()
+      if (this.start_time != '' && this.end_time != ''){
+        this.getDeviceDataMeasurement()}
+    },
+    date: function(newDate){
+      this.clearPlotData()
+      this.date = newDate
+      let yesterday = new Date(this.date.toString())
+      yesterday.setDate(yesterday.getDate() - 1)
+      yesterday = yesterday.toISOString()
+      yesterday = yesterday.split("T")[0]
+      this.start_time = yesterday + "T" + "17:00:00" + "Z"
+      this.end_time = this.date + "T" + "17:00:00" + "Z"
+      this.getDeviceDataMeasurement()
     }
   }
 

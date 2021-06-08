@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -43,6 +44,9 @@ type DeviceDataRequest struct {
 }
 
 func (db *Data) SetupRouter() {
+	// db.Router.
+	// 	HandleFunc("/devices/data/info", db.handleDeviceDataMsg).
+	// 	Methods("POST", "OPTIONS")
 	db.Router.
 		HandleFunc("/devices/data/log", handlePlotDeviceData).
 		Methods("POST", "OPTIONS")
@@ -67,19 +71,19 @@ func checkError(err error) {
 // 		http.Error(w, err.Error(), http.StatusBadRequest)
 // 		return
 // 	}
-// 	if decoded.PlotId == "" {
+// 	if deviceListReq.PlotId == "" {
 // 		return
 // 	}
-// 	results, err := db.Database.Query("CALL retrieve_device_data(?,?);", decoded.UserId, decoded.PlotId)
-// 	checkQueryError(err)
+// 	results, err := db.Database.Query("CALL retrieve_device_data(?);", deviceListReq.PlotId)
+// 	checkError(err)
 // 	defer results.Close()
 
 // 	for results.Next() {
-// 		err = results.Scan(&tmp.Id, &tmp.Name, &tmp.UserId, &tmp.PlotId, &tmp.Type, &tmp.Position)
-// 		checkScanError(err)
-// 		deviceData = append(deviceData, tmp)
+// 		err = results.Scan(&tmp.Id, &tmp.Name, &tmp.Type)
+// 		checkError(err)
+// 		deviceListRes = append(deviceListRes, tmp)
 // 	}
-// 	jsonString, err := json.Marshal(deviceData)
+// 	jsonString, err := json.Marshal(deviceListRes)
 // 	checkError(err)
 
 // 	// buff := bytes.NewBuffer(jsonString)
@@ -100,13 +104,13 @@ func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var feed string
+	var feedKey string
 	if deviceDataReq.Type == "soil" {
-		feed = "soilmoist"
+		feedKey = "soilmoist"
 	} else {
-		feed = "temphumid"
+		feedKey = "temphumid"
 	}
-	url := fmt.Sprintf("https://io.adafruit.com/api/v2/MDPSmartFarm/feeds/%s/data?start_time=%s&end_time=%s&include=value,created_at", feed, deviceDataReq.Start_time, deviceDataReq.End_time)
+	url := fmt.Sprintf("https://io.adafruit.com/api/v2/MDPSmartFarm/feeds/%s/data?start_time=%s&end_time=%s&include=value,created_at", feedKey, deviceDataReq.Start_time, deviceDataReq.End_time)
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Set("Content-Type", "application/json")
 	checkError(err)
@@ -124,7 +128,12 @@ func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type dataLog struct {
-		Data [][]string `json:"Data"`
+		Data    [][]string `json:"Data"`
+		Avg     string     `json:"avg"`
+		Max     string     `json:"max"`
+		Min     string     `json:"min"`
+		MinTime string     `json:"minTime"`
+		MaxTime string     `json:"maxTime"`
 	}
 	var apiResponse []map[string]string
 	var listValue [][]string
@@ -132,15 +141,38 @@ func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 	checkError(er)
 
 	tmp := &responseData{}
+	var min, max, sum, count float64
+	var maxTime, minTime string
 	for i := len(apiResponse) - 1; i >= 0; i-- {
 		err := json.Unmarshal([]byte(apiResponse[i]["value"]), tmp)
 		checkError(err)
 		if tmp.Name == deviceDataReq.DeviceName {
+			var tmpData []string
 			dateTime := strings.Split(apiResponse[i]["created_at"], "T")
+			count++
+			if deviceDataReq.Type != "soil" {
+				tmpData = strings.Split(tmp.Data, "-")
+				if deviceDataReq.Type == "temp" {
+					tmp.Data = tmpData[0]
+				}
+				if deviceDataReq.Type == "humid" {
+					tmp.Data = tmpData[1]
+				}
+			}
+			floatData, _ := strconv.ParseFloat(tmp.Data, 64)
+			sum += floatData
+			if max < floatData {
+				max = floatData
+				maxTime = dateTime[0] + " " + dateTime[1] + " -0700"
+			}
+			if count == 1 || min > floatData {
+				min = floatData
+				minTime = dateTime[0] + " " + dateTime[1] + " -0700"
+			}
 			listValue = append(listValue, []string{dateTime[0] + " " + dateTime[1] + " -0700", tmp.Data})
 		}
 	}
-	jsonmsg := dataLog{listValue}
+	jsonmsg := dataLog{listValue, fmt.Sprintf("%.2f", sum/count), fmt.Sprintf("%.2f", max), fmt.Sprintf("%.2f", min), minTime, maxTime}
 	jsonString, _ := json.Marshal(jsonmsg)
 	w.Write(jsonString)
 }
