@@ -29,10 +29,10 @@
             <div class="info" style="display: flex; justify-content: center;">
               <p> 50%
               <br> Soil Moisture </p>
-              <p > 50'C
+              <p > 37'C
               <br> Temperature </p>
-              <p > 50'C
-              <br> Temperature </p>
+              <p > 30%
+              <br> Humidity </p>
             </div>
           </div>
         </template>

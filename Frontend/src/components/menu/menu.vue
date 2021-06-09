@@ -11,11 +11,51 @@
       <template>
           <nav class="mr-auto">
             <b-button-group vertical style="width: 100%;">
-              <b-button variant="dark" v-on:click="selectFeature(home)">Home</b-button>
-              <b-button variant="dark" v-on:click="selectFeature(autoMode)">Auto Mode</b-button>
-              <b-button variant="dark" v-on:click="selectFeature(timerMode)">Timer Mode</b-button>
-              <b-button variant="dark" v-on:click="selectFeature(waterLog)">Water Log</b-button>
-              <b-button variant="dark" v-on:click="selectFeature(devices)">Devices</b-button>
+              <b-button variant="dark" class="menu-button" v-on:click="selectFeature(home)"> 
+                <b-container> 
+                  <b-row>
+                  <b-col cols="2"/>
+                  <b-col cols="1"> <b-icon icon="house-door-fill" aria-hidden="true"></b-icon></b-col>
+                  <b-col class="text-left"> <b>Home</b> </b-col>
+                  </b-row>
+                </b-container>
+              </b-button>
+              <b-button variant="dark" class="menu-button" v-on:click="selectFeature(autoMode)">
+                <b-container> 
+                  <b-row>
+                  <b-col cols="2"/>
+                  <b-col cols="1"> <b-icon icon="gear-wide" aria-hidden="true"></b-icon></b-col>
+                  <b-col class="text-left"> <b>Auto Mode</b></b-col>
+                  </b-row>
+                </b-container>
+              </b-button>
+              <b-button variant="dark" class="menu-button" v-on:click="selectFeature(timerMode)">
+                <b-container> 
+                  <b-row>
+                  <b-col cols="2"/>
+                  <b-col cols="1"> <b-icon icon="clock-history" aria-hidden="true"></b-icon></b-col>
+                  <b-col class="text-left"><b>Timer Mode</b></b-col>
+                  </b-row>
+                </b-container>
+              </b-button>
+              <b-button variant="dark" class="menu-button" v-on:click="selectFeature(waterLog)">
+                <b-container> 
+                  <b-row>
+                  <b-col cols="2"/>
+                  <b-col cols="1"> <b-icon icon="graph-up" aria-hidden="true"></b-icon></b-col>
+                  <b-col class="text-left"><b>Water Log</b></b-col>
+                  </b-row>
+                </b-container>
+              </b-button>
+              <b-button variant="dark" class="menu-button" v-on:click="selectFeature(devices)">
+                <b-container> 
+                  <b-row>
+                  <b-col cols="2"/>
+                  <b-col cols="1"><b-icon icon="cpu" aria-hidden="true"></b-icon></b-col>
+                  <b-col class="text-left"><b>Devices</b></b-col>
+                  </b-row>
+                </b-container>
+              </b-button>
             </b-button-group>
           </nav>
       </template>
@@ -51,5 +91,7 @@
 .ml-0{
   width: 100%;
 }
-
+.menu-button{
+  padding: 10px;
+}
 </style>

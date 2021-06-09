@@ -57,7 +57,7 @@
               @show="resetModal"
               @hidden="resetModal"
               @ok="handleSubmit"
-              >
+              />
               <div class="d-block text-center">
                 <b-form v-if="show">
                   <b-form-group id="input-preset" label="Preset Name" label-for="input-preset">

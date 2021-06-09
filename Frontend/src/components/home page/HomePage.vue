@@ -6,7 +6,7 @@
       <panel/>
     </div>
     <div class="row flex-grow-1" >
-      <div class="col-4">
+      <div class="col-3">
         <testmenu style="height:100%; width: 100%;" v-on:changefeature="switchFeature"></testmenu>
       </div>
       <div class="col">
