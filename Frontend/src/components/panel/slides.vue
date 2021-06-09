@@ -29,15 +29,9 @@
             <div class="info" style="display: flex; justify-content: center;">
               <p> {{soil}}%
               <br> Soil Moisture </p>
-<<<<<<< HEAD
-              <p > 37'C
-              <br> Temperature </p>
-              <p > 30%
-=======
               <p > {{temp + '&deg;'}}C
               <br> Temperature </p>
               <p > {{humid}}%
->>>>>>> nguyen
               <br> Humidity </p>
             </div>
           </div>
