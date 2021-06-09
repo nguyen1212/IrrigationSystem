@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "apexcharts": "^3.27.1",
-    "vue-date-range": "^3.1.7",
-    "vue2-datepicker": "^3.9.1",
-    "vue2-daterange-picker": "^0.6.5"
-  }
-}
