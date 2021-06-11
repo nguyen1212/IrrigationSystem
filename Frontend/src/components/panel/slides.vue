@@ -14,7 +14,7 @@
       <b-carousel-slide caption="Select Plot" img-blank>
         <template>
             <div>
-                <b-form-select style="width: 60%" v-model="selectedPlot" :options="plots" @change="switchPlot(selectedPlot)"></b-form-select>
+                <b-form-select style="width: 60%" v-model="selectedPlot" :options="plots"></b-form-select>
             </div>
         </template>
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -40,6 +40,9 @@
       </b-carousel-slide>
 
     </b-carousel>
+    <b-modal id="modal-1" title="Enter Plot Name">
+    <b-form-input v-model="plotName" placeholder="Enter plot name"></b-form-input>
+    </b-modal>
   </div>
 </template>
 
@@ -61,12 +64,13 @@
         forcemode: '',
         selectedPlot: '',
         selectedMode: '',
+        plotName: '',
         plots: [
           { value: '', text: 'Please select an option' },
           { value: 'New York', text: 'New York' },
           { value: 'California', text: 'California' },
           { value: '', text: 'Beijing' },
-          { value: '', text: 'Add...'}
+          { value: 'add', text: 'Add...'}
         ],
         modes: [
           {value: 'none', text: 'Select Mode' },
@@ -106,6 +110,23 @@
       },
       switchPlot(selectedPlot){
         this.$emit('plotSelection', selectedPlot)
+      }
+    },
+    watch:{
+      selectedPlot: function(newPlot){
+        if (newPlot == 'add'){
+          this.$bvModal.show('modal-1')
+        }
+        else{
+          this.selectedPlot = newPlot
+          this.switchPlot(selectedPlot)
+        }
+      },
+      plotName: function(newPlot){
+        this.plotName = newPlot
+        var tmp = this.plots.pop()
+        this.plots.push({value: '', text: newPlot})
+        this.plots.push({ value: 'add', text: 'Add...'})
       }
     }
   }
