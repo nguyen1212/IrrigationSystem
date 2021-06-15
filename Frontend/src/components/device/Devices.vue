@@ -14,7 +14,7 @@
           <p>Name: <b-form-select style="width: 80%; float: right;" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedType === null"></b-form-select></p>
         </div>
         <div>
-          <p>Date: <b-form-datepicker style="width: 80%; float: right;" id="ex-disabled-readonly" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
+          <p>Date: <b-form-datepicker style="width: 80%; float: right;" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
         </div>
         </div>
         <br>
