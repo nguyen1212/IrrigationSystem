@@ -113,8 +113,10 @@ export default {
   methods: {
     getWaterLogData() {
       var self = this;
+      // console.log(this.extractDate(self.range[0]));
+      // console.log(this.extractDate(self.range[1]));
       axios
-        .post("http://localhost:8080/devices/data/log", {
+        .post("url", {
           startDate: this.extractDate(self.range[0]),
           endDate: this.extractDate(self.range[1]),
         })
@@ -128,7 +130,7 @@ export default {
         });
     },
     clearPlotData() {
-      console.log("clear");
+      // console.log("clear");
       this.series = [
         {
           data: [],
