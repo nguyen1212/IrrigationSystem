@@ -1,13 +1,15 @@
 <template>
   <mdb-card class="card-body" style="width: 100%; ">
     <mdb-card-title>
-        <span style="float:left; color: white;">{{currentDateTime()}}</span>
+        <span style="float:left; color: white;">{{this.date}}</span>
         <span style="float:right; color: white;">
           <p> User Name
           <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon>Log out</b-button>
           </p>
           <!-- <p v-html='content'></p> -->
         </span>
+        <br/>
+        <span style="float:left; color: white;">{{this.time}}</span>
     </mdb-card-title>
     <div class="flex-row">
       <slides v-on="$listeners" v-bind:ws='this.ws' :soil="this.soil" :temp="this.temp" :humid="this.humid"/>
@@ -25,14 +27,30 @@
       mdbCardTitle,
       slides
     },
+    props:{
+      PlotId: String,
+      UserId: String,
+    },
     data(){ return{
       ws:null,
       msg: Object,
       soil: '',
       temp: '',
       humid: '',
+      dateTimeFunc: null,
+      date: '',
+      time: '',
     }},
-    created: function(){this.connect()},
+    created: function(){
+      var self = this
+      var tmp = ''
+      this.connect()
+      this.dateTimeFunc = setInterval(()=>{
+        tmp = self.currentDateTime()
+        this.date = tmp.split("|")[0]
+        this.time = tmp.split("|")[1]
+      }, 1000)
+    },
     methods: {
       classifyMsg(msg){
         if (msg.name == 'SOIL') this.soil = msg.data
@@ -44,10 +62,10 @@
     },
       currentDateTime() {
         const current = new Date();
-        const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
-        // const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
-        // const dateTime = 'Date: ' + date +'\n'+ 'Time: ' + time;
-        return 'Date: ' + date;
+        const date = current.getDate() + '-' + (current.getMonth() + 1) + '-' + current.getFullYear();
+        const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+        const dateTime = 'Date: ' + date +'|'+ 'Time: ' + time;
+        return dateTime;
       },
       logout() {
         firebase
@@ -76,11 +94,14 @@
           self.msg = msg
           self.classifyMsg(msg)
         })
-        this.ws.addEventListener('close', function(e){
+        this.ws.addEventListener('close', function(){
           self.ws.close()}
         )
-      }
+      },  
     },
+    beforeDestroy () {
+      clearInterval(this.dateTimeFunc)
+    }
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -95,7 +95,6 @@ func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusOK)
-
 	var deviceDataReq DeviceDataRequest
 
 	err := json.NewDecoder(r.Body).Decode(&deviceDataReq)
@@ -106,11 +105,13 @@ func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 
 	var feedKey string
 	if deviceDataReq.Type == "soil" {
-		feedKey = "soilmoist"
+		// feedKey = "soilmoist"
+		feedKey = "bk-iot-soil"
 	} else {
-		feedKey = "temphumid"
+		// feedKey = "temphumid"
+		feedKey = "bk-iot-temp-humid"
 	}
-	url := fmt.Sprintf("https://io.adafruit.com/api/v2/MDPSmartFarm/feeds/%s/data?start_time=%s&end_time=%s&include=value,created_at", feedKey, deviceDataReq.Start_time, deviceDataReq.End_time)
+	url := fmt.Sprintf("https://io.adafruit.com/api/v2/CSE_BBC/feeds/%s/data?start_time=%s&end_time=%s&include=value,created_at", feedKey, deviceDataReq.Start_time, deviceDataReq.End_time)
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Set("Content-Type", "application/json")
 	checkError(err)
@@ -145,11 +146,12 @@ func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 	var maxTime, minTime string
 	for i := len(apiResponse) - 1; i >= 0; i-- {
 		err := json.Unmarshal([]byte(apiResponse[i]["value"]), tmp)
-		checkError(err)
+		if err != nil {
+			continue
+		}
 		if tmp.Name == deviceDataReq.DeviceName {
 			var tmpData []string
 			dateTime := strings.Split(apiResponse[i]["created_at"], "T")
-			count++
 			if deviceDataReq.Type != "soil" {
 				tmpData = strings.Split(tmp.Data, "-")
 				if deviceDataReq.Type == "temp" {
@@ -159,8 +161,15 @@ func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 					tmp.Data = tmpData[1]
 				}
 			}
+			if len(tmp.Data) == 0 {
+				continue
+			}
+			if n, err := strconv.Atoi(tmp.Data); err == nil && (n > 100 || n < -100) {
+				continue
+			}
 			floatData, _ := strconv.ParseFloat(tmp.Data, 64)
 			sum += floatData
+			count++
 			if max < floatData {
 				max = floatData
 				maxTime = dateTime[0] + " " + dateTime[1] + " -0700"

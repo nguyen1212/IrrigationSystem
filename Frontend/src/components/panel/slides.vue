@@ -10,22 +10,20 @@
       @sliding-start="onSlideStart"
       @sliding-end="onSlideEnd"
     >
-      <!-- Text slides with image -->
       <b-carousel-slide caption="Select Plot" img-blank>
         <template>
             <div>
-                <b-form-select style="width: 60%" v-model="selectedPlot" :options="plots" @change="switchPlot(selectedPlot)"></b-form-select>
+                <b-form-select style="width: 60%" v-model="selectedPlot" :options="plots"></b-form-select>
             </div>
         </template>
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
       </b-carousel-slide>
 
-      <!-- Slides with custom text -->
       <b-carousel-slide img-blank>
         <template>
           <div>
             <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" v-bind:variant="forcemode"></b-icon></b-button></div>
-            <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes"></b-form-select></div>
+            <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes" :disabled="selectedPlot===''"></b-form-select></div>
             <div class="info" style="display: flex; justify-content: center;">
               <p> {{soil}}%
               <br> Soil Moisture </p>
@@ -38,7 +36,6 @@
         </template>
           <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
       </b-carousel-slide>
-
     </b-carousel>
   </div>
 </template>
@@ -47,10 +44,11 @@
   export default {
     props: {
       ws: WebSocket,
-      soil: '',
-      temp: '',
-      humid: '',
-      
+      soil: String,
+      temp: String,
+      humid: String,
+      PlotId: String,
+      UserId: String,
     },
     name: 'slides',
     data() {
@@ -61,15 +59,14 @@
         forcemode: '',
         selectedPlot: '',
         selectedMode: '',
+        plotName: '',
         plots: [
           { value: '', text: 'Please select an option' },
           { value: 'New York', text: 'New York' },
           { value: 'California', text: 'California' },
-          { value: '', text: 'Beijing' },
-          { value: '', text: 'Add...'}
+          { value: 'Beijing', text: 'Beijing' },
         ],
         modes: [
-          {value: 'none', text: 'Select Mode' },
           {value: 'auto', text: 'Auto Mode'},
           {value: 'manual', text: 'Manual Mode'}
         ]
@@ -107,7 +104,7 @@
       switchPlot(selectedPlot){
         this.$emit('plotSelection', selectedPlot)
       }
-    }
+    },
   }
 </script>
 <style scoped>
@@ -118,4 +115,5 @@
 .info {
   margin-top: 0.5cm;
 }
+
 </style>

@@ -3,7 +3,7 @@
   <div id="homepage" class="d-flex flex-column h-100 ">
     <!-- <div class="d-flex flex-column h-100 "> -->
     <div class="row ">
-      <panel @plotSelection="switchPlot"/>
+      <panel @plotSelection="switchPlot" :PlotId="this.PlotId" :UserId="this.UserId"/>
     </div>
     <div class="row flex-grow-1" >
       <div class="col-3">

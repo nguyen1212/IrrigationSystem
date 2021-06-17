@@ -14,16 +14,17 @@
           <p>Name: <b-form-select style="width: 80%; float: right;" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedType === null"></b-form-select></p>
         </div>
         <div>
-          <p>Date: <b-form-datepicker style="width: 80%; float: right;" id="ex-disabled-readonly" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
+          <p>Date: <b-form-datepicker style="width: 80%; float: right;" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
         </div>
         </div>
         <br>
         <hr/>
         <p> <strong> Statistics </strong> </p>
         <div style="float: left">
-        <p> Average: {{this.avg}}</p>
-        <p> Highest: {{this.max}} - {{this.maxTime}}</p>
-        <p> Lowest: {{this.min}} - {{this.minTime}}<p></div>
+          <p> Highest: {{this.max}} - {{this.maxTime}}</p>
+          <p> Lowest: {{this.min}} - {{this.minTime}}<p>
+          <p id="avg">Average: </p>
+        </div>
       </div>
     </div>
   </div>
@@ -44,6 +45,7 @@ export default {
   data() {
     {
       return {
+        unit: '',
         avg: '',
         max: '',
         maxTime: '',
@@ -62,12 +64,12 @@ export default {
           {value: 'temp', text: 'Temperature'},
           {value: 'humid', text: 'Humidity'}
         ],
-        soilDevices: ['1', '2', '3'],
-        tempDevices: ['4', '5', '6'],
-        humidDevices: ['7', '8', '9'],
+        soilDevices: ['SOIL'],
+        tempDevices: ['TEMP'],
+        humidDevices: ['HUMID'],
         deviceData: [],
         series: [{
-            name: 'percentage',
+            name: '',
             data: [],
           }],
         chartOptions:{
@@ -148,8 +150,8 @@ export default {
       axios.post("http://localhost:8080/devices/data/log", {
         start_time: self.start_time,
         end_time: self.end_time,
-        deviceName: 'SOIL',
-        type: self.selectedType
+        deviceName: self.deviceName,
+        type: self.selectedType,
       })
       .then((response)=>{
         this.deviceData = response.data.Data
@@ -162,6 +164,10 @@ export default {
         this.series = [{
           data: response.data.Data
         }]
+        if (this.selectedType == 'temp')
+          document.getElementById("avg").innerHTML = 'Average:' + this.avg + '&deg;' + 'C - ' + this.date;
+        else
+          document.getElementById("avg").innerHTML = 'Average:' + this.avg + '%' + ' - ' + this.date;
       })
       .catch((error)=>{
         window.alert(`Cannot plot data due to error: ${error}`)
@@ -181,16 +187,46 @@ export default {
     },
     selectedType: function(newType){
       this.selectedType = newType
-      this.clearPlotData()
+      if (newType == 'temp'){
+        this.unit = '\'&deg;\''
+        this.chartOptions = {
+          yaxis:{
+            title:{
+              text: 'Celcius',
+            }
+          }
+        },
+        this.series = [{
+          name: 'Degree',
+          data: []
+        }],
+        this.selectedDeviceList = this.tempDevices;
+      }
+      else{
+        document.getElementById("avg").innerHTML = 'Average:' + this.avg + '&deg;' + 'C - ' + this.date;
+        this.unit = '%'
+        this.chartOptions = {
+          yaxis:{
+            title:{
+              text: 'Percentage'
+            }
+          }
+        },
+        this.series = [{
+          name: 'Percentage',
+          data: []
+        }]
       if (newType == 'soil')
         this.selectedDeviceList = this.soilDevices
-      else if (newType == 'temp')
-        this.selectedDeviceList = this.tempDevices
       else
         this.selectedDeviceList = this.humidDevices
+      }
     },
     selectedDevice: function(newDevice){
       this.selectedDevice = newDevice
+      this.deviceName = newDevice
+      if (newDevice != "SOIL")
+        this.deviceName = 'TEMP-HUMID'
       this.clearPlotData()
       if (this.start_time != '' && this.end_time != ''){
         this.getDeviceDataMeasurement()}
@@ -204,6 +240,7 @@ export default {
       yesterday = yesterday.split("T")[0]
       this.start_time = yesterday + "T" + "17:00:00" + "Z"
       this.end_time = this.date + "T" + "17:00:00" + "Z"
+      console.log(this.start_time, this.end_time, this.type)
       this.getDeviceDataMeasurement()
     }
   }
