@@ -24,7 +24,9 @@
                 <b-container> 
                   <b-row>
                   <b-col cols="2"/>
-                  <b-col cols="1"> <b-icon icon="gear-wide" aria-hidden="true"></b-icon></b-col>
+                  <b-col cols="1"> 
+                  <span class="auto-icon"></span>
+                  </b-col>
                   <b-col class="text-left"> <b>Auto Mode</b></b-col>
                   </b-row>
                 </b-container>
@@ -93,5 +95,12 @@
 }
 .menu-button{
   padding: 10px;
+}
+.auto-icon {
+    background: url('~@/assets/icon/automode/letter-a.svg');
+    height: 21px;
+    width: 21px;
+    display: flex;
+    /* Other styles here */
 }
 </style>

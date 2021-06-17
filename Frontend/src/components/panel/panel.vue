@@ -6,7 +6,7 @@
           <p> User Name
           <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon>Log out</b-button>
           </p>
-          <p v-html='content'></p>
+          <!-- <p v-html='content'></p> -->
         </span>
     </mdb-card-title>
     <div class="flex-row">
