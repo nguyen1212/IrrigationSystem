@@ -99,6 +99,7 @@
                   </b-form-group>
                 </b-form>
             </div>
+            </div>
             <template #modal-footer="{ ok, cancel }">
               <b-button variant="success" @click="ok()">
                 Submit
