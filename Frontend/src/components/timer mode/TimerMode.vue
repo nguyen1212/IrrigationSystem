@@ -57,7 +57,7 @@
               @show="resetModal"
               @hidden="resetModal"
               @ok="handleSubmit"
-              >
+              />
               <div class="d-block text-center">
                 <b-form v-if="show">
                   <b-form-group id="input-preset" label="Preset Name" label-for="input-preset">
@@ -98,6 +98,7 @@
                     />
                   </b-form-group>
                 </b-form>
+            </div>
             </div>
             <template #modal-footer="{ ok, cancel }">
               <b-button variant="success" @click="ok()">
