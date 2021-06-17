@@ -14,7 +14,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import ListView from '../auto mode/ListView.vue'
 export default {
     data() {
@@ -30,36 +30,36 @@ export default {
     methods: {
       handleAddPreset(form)
       {
-        //   axios
-        //   .post('url', form)
-        //   .then((response) => {
-        //   console.log(response);
-        //  this.handleGetPresetList();
-        //  })
-        //   .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
-        console.log("form to be added:", form)
+          axios
+          .post('url', form)
+          .then((response) => {
+          console.log(response);
+         this.handleGetPresetList();
+         })
+          .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
+        // console.log("form to be added:", form)
 
       },
       handleUpdatePreset(form)
       {
-        // axios
-        // .put('url',form)
-        // .then((response) => {
-        //     console.log(response);
-        //     this.handleGetPresetList();
-        // })
-        // .catch((error) => window.alert(`Error while handling PUT request: ${error}` ))
-        console.log("form to be updated:", form)
+        axios
+        .put('url',form)
+        .then((response) => {
+            console.log(response);
+            this.handleGetPresetList();
+        })
+        .catch((error) => window.alert(`Error while handling PUT request: ${error}` ))
+        // console.log("form to be updated:", form)
       },
       handleGetPresetList()
       {
-        // axios
-        // .get('url')
-        // .then((response) => {
-        //     this.info = response
-        // })
-        // .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
-        this.info = [
+        axios
+        .get('url')
+        .then((response) => {
+            this.info = response
+        })
+        .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
+        /* this.info = [
             {
                 "id": 0,
                 "name": "Daisy Preset",
@@ -85,28 +85,28 @@ export default {
                 "notes": "Bay leaves are delicious"
             }
         ]
-        console.log("new preset list fetched")
+        console.log("new preset list fetched")*/
       },
       handleDeletePreset(id)
       {
-        // axios
-        // .delete('url', id)
-        // .then((response) => {
-        //     console.log("ok");
-        // })
-        // .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
-        console.log(`preset ${id} deleted`)
+        axios
+        .delete('url', id)
+        .then((response) => {
+            console.log("ok");
+        })
+        .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
+        /*console.log(`preset ${id} deleted`) */
       },
       handleSelectPreset(id)
       {
-        console.log(`preset ${id} selected`)
-        //   axios
-        //   .post(''url, form)
-        //   .then((response) => {
-        //   console.log(response);
-        //  this.handleGetPresetList();
-        //  })
-        //   .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
+        // console.log(`preset ${id} selected`)
+          axios
+          .post('url', id)
+          .then((response) => {
+          console.log(response);
+         this.handleGetPresetList();
+         })
+          .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
       }
     },
     components: {
