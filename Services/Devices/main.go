@@ -165,7 +165,7 @@ func checkError(err error) {
 }
 
 func dbConnect() (*sql.DB, error) {
-	db, err := sql.Open("mysql", "root:trannguyen121223@tcp(127.0.0.1:3306)/device_database")
+	db, err := sql.Open("mysql", "root:password@tcp(127.0.0.1:3306)/device_database")
 	if err != nil {
 		return db, err
 	}
@@ -180,9 +180,9 @@ func addRouter(r *mux.Router) *mux.Router {
 func main() {
 
 	db, err := dbConnect()
-	checkError(err)
-	fmt.Println("Database successfully connected")
-	defer db.Close()
+	// checkError(err)
+	// fmt.Println("Database successfully connected")
+	// defer db.Close()
 
 	dataServer := &data.Data{
 		Router:   mux.NewRouter().StrictSlash(true),

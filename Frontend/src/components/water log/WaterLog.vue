@@ -1,5 +1,6 @@
 <template>
   <div class="waterlog">
+    <div class="col">
     <div class="date-select">
       <date-picker
         v-model="range"
@@ -32,6 +33,7 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
@@ -41,6 +43,7 @@ import VueApexCharts from "vue-apexcharts";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 export default {
+  name: 'waterLog',
   components: {
     DatePicker,
     apexchart: VueApexCharts,

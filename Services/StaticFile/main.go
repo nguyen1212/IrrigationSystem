@@ -9,9 +9,9 @@ import (
 func main() {
 	fs := http.FileServer(http.Dir("../../Frontend/dist"))
 	http.Handle("/", fs)
-	fmt.Println("Server listening on port 10000")
-	err	:=	http.ListenAndServe(":10000", nil)
-	if err	!= nil{
+	fmt.Println("Server listening on port 80")
+	err := http.ListenAndServe(":80", nil)
+	if err != nil {
 		log.Fatal(err)
 	}
 }
