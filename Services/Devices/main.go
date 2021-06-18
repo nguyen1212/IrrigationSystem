@@ -179,7 +179,7 @@ func addRouter(r *mux.Router) *mux.Router {
 
 func main() {
 
-	db, err := dbConnect()
+	db, _ := dbConnect()
 	// checkError(err)
 	// fmt.Println("Database successfully connected")
 	// defer db.Close()
