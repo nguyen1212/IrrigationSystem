@@ -50,7 +50,6 @@ type DeviceMsg struct {
 }
 
 func handleWSConnections(w http.ResponseWriter, r *http.Request) {
-
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -126,7 +125,7 @@ func createClient() mqtt.Client {
 	// Username of Adafruit account -> For demo only
 	opts.SetUsername("MDPSmartFarm")
 	// Key of Adafruit account: Get from MyKey tab -> For demo only
-	opts.SetPassword("")
+	opts.SetPassword()
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler

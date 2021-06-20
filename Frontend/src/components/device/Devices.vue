@@ -6,16 +6,10 @@
       </div>
       <div class="col">
         <p> <strong> Device Information </strong></p>
-        <div style="width: 100%; ">
-        <div>
-          <p>Type: <b-form-select style="width: 80%; float: right;" v-model="selectedType" :options="types"></b-form-select></p>
-        </div>
-        <div>
-          <p>Name: <b-form-select style="width: 80%; float: right;" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedType === null"></b-form-select></p>
-        </div>
-        <div>
-          <p>Date: <b-form-datepicker style="width: 80%; float: right;" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
-        </div>
+        <div style="width: 100%; text-align: left;">
+          <p>Type: <b-form-select style="width: 80%; float: right; margin-right: 5%" v-model="selectedType" :options="types"></b-form-select></p>
+          <p>Name: <b-form-select style="width: 80%; float: right; margin-right: 5%" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedType === null"></b-form-select></p>
+          <p>Date: <b-form-datepicker style="width: 80%; float: right; margin-right: 5%" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
         </div>
         <br>
         <hr/>
