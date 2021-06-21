@@ -78,7 +78,9 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			log.Fatal(err)
+			ws.Close()
+			client.Disconnect(250)
+			log.Printf("%v", err)
 			return
 		}
 		if msg.Data == "1" {
@@ -125,7 +127,7 @@ func createClient() mqtt.Client {
 	// Username of Adafruit account -> For demo only
 	opts.SetUsername("MDPSmartFarm")
 	// Key of Adafruit account: Get from MyKey tab -> For demo only
-	opts.SetPassword()
+	opts.SetPassword("")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler

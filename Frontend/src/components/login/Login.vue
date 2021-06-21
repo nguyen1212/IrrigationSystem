@@ -64,7 +64,9 @@ export default {
                 .auth()
                 .signInWithEmailAndPassword(this.email, this.password)
                 .then(() => {
-                    this.$router.push('/homepage');
+                    this.$router.push({
+                        name: 'Home Page',
+                        params: {UserId: this.email}});
                 })
                 .catch(error => {
                     alert(error.message);

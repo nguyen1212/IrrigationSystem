@@ -1,6 +1,6 @@
 <template>
-  <div style="width:100%;">
-  <mdb-card class="card-body" style="width: 100%; ">
+  <div>
+  <mdb-card class="card-body">
     <b-sidebar class="my-sidebar" id="sidebar-1" title="Menu" shadow visible=True bg-variant="dark" text-variant="light" >
       <template #header="{}">
        <div style="width: 100%;">

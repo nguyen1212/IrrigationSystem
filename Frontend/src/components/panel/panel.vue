@@ -3,7 +3,7 @@
     <mdb-card-title>
         <span style="float:left; color: white;">{{this.date}}</span>
         <span style="float:right; color: white;">
-          <p> User Name
+          <p> {{UserId}}
           <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon>Log out</b-button>
           </p>
           <!-- <p v-html='content'></p> -->
