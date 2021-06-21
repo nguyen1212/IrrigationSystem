@@ -3,7 +3,7 @@
       <div class="mt-5">
         <ListView
         :info="JSON.stringify(this.info)" 
-        :selected="1" 
+        :selected="select" 
         @add-preset="handleAddPreset" 
         @update-preset="handleUpdatePreset"
         @delete-preset="handleDeletePreset"
@@ -20,7 +20,7 @@ export default {
     data() {
         return {
             info: [],
-            view: "ListView"
+            select: 1
         }
     },
     created() { 
@@ -28,35 +28,21 @@ export default {
     },
     name: 'autoMode',
     methods: {
-      handleAddPreset(form)
-      {
-          axios
-          .post('url', form)
-          .then((response) => {
-          console.log(response);
-         this.handleGetPresetList();
-         })
-          .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
-        // console.log("form to be added:", form)
-
-      },
-      handleUpdatePreset(form)
-      {
-        axios
-        .put('url',form)
-        .then((response) => {
-            console.log(response);
-            this.handleGetPresetList();
-        })
-        .catch((error) => window.alert(`Error while handling PUT request: ${error}` ))
-        // console.log("form to be updated:", form)
-      },
       handleGetPresetList()
       {
         axios
         .get('url')
         .then((response) => {
-            this.info = response
+            /**
+             * response: {
+              * presetContent: {
+              *      ****** content
+              * }
+              * selectedPreset: Number
+             * } 
+             */
+            this.info = response.presetContent
+            this.select = response.selectedPreset
         })
         .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
         /* this.info = [
@@ -85,7 +71,31 @@ export default {
                 "notes": "Bay leaves are delicious"
             }
         ]
+        this.select=1
         console.log("new preset list fetched")*/
+      },
+      handleAddPreset(form)
+      {
+          axios
+          .post('url', form)
+          .then((response) => {
+          console.log(response);
+         this.handleGetPresetList();
+         })
+          .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
+        // console.log("form to be added:", form)
+
+      },
+      handleUpdatePreset(form)
+      {
+        axios
+        .put('url',form)
+        .then((response) => {
+            console.log(response);
+            this.handleGetPresetList();
+        })
+        .catch((error) => window.alert(`Error while handling PUT request: ${error}` ))
+        // console.log("form to be updated:", form)
       },
       handleDeletePreset(id)
       {
