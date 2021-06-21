@@ -11,7 +11,6 @@
         @delete-repeat-preset="handleRepeatDeletePreset"
         @select-repeat-preset="handleRepeatSelectPreset"
 
-<<<<<<< HEAD
         @add-interval-preset="handleIntervalAddPreset" 
         @update-interval-preset="handleIntervalUpdatePreset"
         @delete-interval-preset="handleIntervalDeletePreset"
@@ -19,130 +18,6 @@
         />
       </div>
     </div>
-=======
-          <b-card-text style="display: flex; color: #c0c0c0; margin-bottom: 0">start at</b-card-text>
-          <template>
-            <div>
-              <b-form-timepicker style="width: 280px" v-model="value" locale="en"></b-form-timepicker>
-            </div>
-          </template>
-
-          <b-card-text style="display: flex; color: #c0c0c0; margin-top: 1rem; margin-bottom: 0">set interval</b-card-text>
-          <template>
-            <div>
-              <b-form-spinbutton
-                v-model="intervalValue"
-                :formatter-fn="intervalFormatter"
-                min="0"
-                max="23"
-                wrap
-                style="width: 280px"
-              ></b-form-spinbutton>
-            </div>
-          </template>
-        </b-tab>
-
-      <!-- REPEAT MODE -->
-        <b-tab title="Repeat Mode">
-          <b-card-text style="display: flex; color: #c0c0c0">Current Mode: Repeat Mode
-            <div style="width: 460px"/>
-            <b-button-group>
-              <b-button style="background-color: #ffffff; color: black">Timer</b-button>
-              <b-button style="background-color: #c0c0c0; color: black">Repeat</b-button>
-            </b-button-group>
-          </b-card-text>
-
-          <b-card-text style="display: flex">
-            <div style= "width: 700px"/>
-            <div>
-              <b-button v-b-modal.repeat-box style="background-color: #ffffff; border-color: #ffffff">
-                <img style = "width: 25px" src="./plus_icon.png"/>
-              </b-button>
-              <b-modal
-              id="repeat-box"
-              title="Add new preset"
-              button-size="md"
-              @show="resetModal"
-              @hidden="resetModal"
-              @ok="handleSubmit"
-              />
-              <div class="d-block text-center">
-                <b-form v-if="show">
-                  <b-form-group id="input-preset" label="Preset Name" label-for="input-preset">
-                    <b-form-input
-                      id="input-preset"
-                      v-model="form.label"
-                      placeholder="Enter name"
-                      required
-                    />
-                  </b-form-group>
-
-                  <b-form-group id="input-preset" label="Time" label-for="input-preset">
-                    <b-form-input
-                      id="input-preset"
-                      v-model="form.time"
-                      placeholder="Enter time"
-                      required
-                    />
-                  </b-form-group>
-
-                  <b-form-group id="input-preset" label="Watered In" label-for="input-preset">
-                    <b-form-spinbutton 
-                      v-model="form.wateredInValue"
-                      :formatter-fn="wateredInFormatter"
-                      min="0"
-                      max="4"
-                      wrap
-                    />
-                  </b-form-group>
-
-                  <b-form-group id="input-preset" label="Repeat" label-for="input-preset">
-                    <b-form-spinbutton 
-                      v-model="form.repeatValue"
-                      :formatter-fn="repeatFormatter"
-                      min="0"
-                      max="6"
-                      wrap
-                    />
-                  </b-form-group>
-                </b-form>
-            </div>
-            </div>
-            <template #modal-footer="{ ok, cancel }">
-              <b-button variant="success" @click="ok()">
-                Submit
-              </b-button>
-              <b-button variant="danger" @click="cancel()">
-                Cancel
-              </b-button>
-            </template>
-          </b-card-text>
-          <hr style="margin-top: 1rem" width="100%" size= "5px" align="center"/>
-
-          <b-card-text>
-            <div style="margin: 1rem 1rem 1rem 1rem; display: flex">
-              <h1 style="margin: 0 0 0 0; width: 101px">11:11</h1>
-              <div style= "width: 238px"/>
-              <p style="margin: 0 0 0 0; padding-top: 10px; padding-bottom:10px; color: #c0c0c0">Click here to edit</p>
-              <div style= "width: 200px"/>
-              <b-form-checkbox switch size="lg" style="margin: 0 0 0 0; padding-top: 10px; padding-bottom:10px" v-model="switchValue1" name="check-button"></b-form-checkbox>
-            </div>
-            <hr style="margin-top: 1rem" width="100%" size= "5px" align="center"/>
-
-            <div style="margin: 1rem 1rem 1rem 1rem; display: flex">
-              <h1 style="margin: 0 0 0 0; width: 101px">17:03</h1>
-              <div style= "width: 238px"/>
-              <p style="margin: 0 0 0 0; padding-top: 10px; padding-bottom:10px; color: #c0c0c0">Click here to edit</p>
-              <div style= "width: 200px"/>
-              <b-form-checkbox switch size="lg" style="margin: 0 0 0 0; padding-top: 10px; padding-bottom:10px" v-model="switchValue2" name="check-button"></b-form-checkbox>
-            </div>
-            <hr style="margin-top: 1rem" width="100%" size= "5px" align="center"/>
-          </b-card-text>
-        </b-tab>
-      </b-tabs>
-    </b-card>
-  </div>
->>>>>>> c157c11e132864da587d0330de90ba601cce497b
 </template>
 
 <script>
@@ -253,7 +128,7 @@ export default {
               "interval": "2 hours",
           },
         ],
-        this.intervalSelect = 2
+        this.intervalSelect = 2g
         console.log("new preset list fetched")
       },
 
