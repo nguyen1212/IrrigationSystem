@@ -24,6 +24,9 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueRouter)
 
+Vue.prototype.$UserId = ""
+Vue.prototype.$UserName = ""
+
 
 new Vue({
   router,
