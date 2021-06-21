@@ -3,15 +3,15 @@
   <div id="homepage" class="d-flex flex-column h-100 ">
     <!-- <div class="d-flex flex-column h-100 "> -->
     <div class="row ">
-      <panel/>
+      <panel @plotSelection="switchPlot" :PlotId="this.PlotId" :UserId="this.UserId"/>
     </div>
     <div class="row flex-grow-1" >
-      <div class="col-4">
-        <testmenu style="height:100%; width: 100%;" v-on:changefeature="switchFeature"></testmenu>
+      <div class="col-3">
+        <mainMenu style="height:100%; width: 100%;" v-on:changefeature="switchFeature"></mainMenu>
       </div>
       <div class="col">
         <keep-alive>
-          <component style="height:100%; width: 100%;" v-bind:is="component" />
+          <component style="height:100%; width: 100%;" v-bind:is="component" :PlotId="this.PlotId" :UserId="this.UserId"/>
         </keep-alive>
       </div>
     </div>
@@ -21,35 +21,30 @@
 </template>
 
 <script>
-
-import axios from 'axios';
 import Panel from '../panel/panel.vue';
 import Menu from '../menu/menu.vue';
 export default {
   name: 'HomePage',
 
   data() { return {
-    websiteUrl: '',
-    thumbnailUrl: '',
     component: '',
-  } },
+    UserId: '',
+    PlotId: '',
+    } 
+  },
 
-  components: {testmenu:Menu, panel: Panel},
+  created(){
+    this.UserId = this.$route.params.UserId
+  },
+
+  components: {mainMenu:Menu, panel: Panel},
 
   methods: {
-    makeWebsiteThumbnail() {
-      axios.post("http://localhost:8081/api/thumbnail", {
-        url: this.websiteUrl,
-      })
-      .then((response) => {
-        this.thumbnailUrl = response.data.screenShotUrl;
-      })
-      .catch((error) => {
-        window.alert(`The API returned an error: ${error}`);
-      })
-    },
     switchFeature(feature){
-        this.component = feature;
+      this.component = feature;
+    },
+    switchPlot(PlotId){
+      this.PlotId = PlotId;
     }
   }
 }

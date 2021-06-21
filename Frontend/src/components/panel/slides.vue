@@ -10,7 +10,6 @@
       @sliding-start="onSlideStart"
       @sliding-end="onSlideEnd"
     >
-      <!-- Text slides with image -->
       <b-carousel-slide caption="Select Plot" img-blank>
         <template>
             <div>
@@ -20,47 +19,54 @@
         <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
       </b-carousel-slide>
 
-      <!-- Slides with custom text -->
       <b-carousel-slide img-blank>
         <template>
           <div>
-            <div><b-button variant="dark" size="lg" ><b-icon icon="power" aria-hidden="true" scale="2" variant="success"></b-icon></b-button></div>
-            <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes"></b-form-select></div>
+            <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" v-bind:variant="forcemode"></b-icon></b-button></div>
+            <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes" :disabled="selectedPlot===''"></b-form-select></div>
             <div class="info" style="display: flex; justify-content: center;">
-              <p> 50%
+              <p> {{soil}}%
               <br> Soil Moisture </p>
-              <p > 50'C
+              <p > {{temp + '&deg;'}}C
               <br> Temperature </p>
-              <p > 50'C
-              <br> Temperature </p>
+              <p > {{humid}}%
+              <br> Humidity </p>
             </div>
           </div>
         </template>
           <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
       </b-carousel-slide>
-
     </b-carousel>
   </div>
 </template>
 
 <script>
   export default {
+    props: {
+      ws: WebSocket,
+      soil: String,
+      temp: String,
+      humid: String,
+      PlotId: String,
+      UserId: String,
+    },
     name: 'slides',
     data() {
       return {
         slide: 0,
         sliding: null,
-        selectedPlot: null,
-        selectedMode: null,
+        forceData: '',
+        forcemode: '',
+        selectedPlot: '',
+        selectedMode: '',
+        plotName: '',
         plots: [
-          { value: null, text: 'Please select an option' },
-          { value: '1', text: 'NewYork' },
-          { value: '2', text: 'London' },
-          { value: '3', text: 'Beijing' },
-          { value: '4', text: 'Add...'}
+          { value: '', text: 'Please select an option' },
+          { value: 'New York', text: 'New York' },
+          { value: 'California', text: 'California' },
+          { value: 'Beijing', text: 'Beijing' },
         ],
         modes: [
-          {value: null, text: 'Select Mode' },
           {value: 'auto', text: 'Auto Mode'},
           {value: 'manual', text: 'Manual Mode'}
         ]
@@ -72,8 +78,33 @@
       },
       onSlideEnd() {
         this.sliding = false
+      },
+      toggle(mode){
+        if (mode == 'success')
+          return 'danger'
+        else
+          return 'success'
+      },
+      send(){
+        var self = this
+        self.forcemode = this.toggle(self.forcemode)
+        if (self.forcemode == 'success')
+          self.forceData = '0'
+        else
+          self.forceData = '1'
+        this.ws.send(
+          JSON.stringify({
+            userId: 'admin@gmail.com',
+            plotId: 'newyork',
+            name: 'RELAY',
+            data: self.forceData
+          })
+        )
+      },
+      switchPlot(selectedPlot){
+        this.$emit('plotSelection', selectedPlot)
       }
-    }
+    },
   }
 </script>
 <style scoped>
@@ -84,4 +115,5 @@
 .info {
   margin-top: 0.5cm;
 }
+
 </style>
