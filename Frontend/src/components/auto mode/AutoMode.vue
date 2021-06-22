@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="mt-5">
+      <div class="pt-5">
         <ListView
         :info="JSON.stringify(this.info)" 
         :selected="select" 
@@ -102,7 +102,7 @@ export default {
         axios
         .delete('url', id)
         .then((response) => {
-            console.log("ok");
+            console.log(response);
         })
         .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
         /*console.log(`preset ${id} deleted`) */
