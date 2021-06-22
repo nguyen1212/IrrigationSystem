@@ -4,11 +4,10 @@
     <div class="d-flex justify-content-center">
       <div id="intro-1">      
       <p class="h5">
-      Smart Irrigation System <br>
+      <b>Smart Irrigation System <br>
        intergrates automatic watering and advance tracking,
-       highly customizable design and IoT Soil Monitor<br>
-       by TEAM NAME
-       </p>
+       highly customizable design and IoT Soil Monitor
+      </b></p>
        </div>
     </div>
     <!-- <p> 
@@ -126,7 +125,7 @@ export default {
   name: 'home',
   data () {
     return {
-      webpage: 'WEBPAGE NAME',
+      webpage: 'ĐẶT CÁI TÊN TRANG WEB DÙM ĐI',
       autoMode: autoMode,
       waterLog: waterLog,
       timerMode: timerMode,
@@ -146,10 +145,13 @@ export default {
 }
 #headline {
   margin: 30px;
+  padding-left: 150px;
+  text-align: left;
 }
 #intro-1 {
   max-width: 500px;
   width: 500px;
+  text-align: left;
   margin: 0px;
 }
 #intro-2 {
