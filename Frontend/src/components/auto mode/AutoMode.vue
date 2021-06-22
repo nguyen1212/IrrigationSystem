@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="pt-5">
+      <div class="pt-g5">
         <ListView
         :info="JSON.stringify(this.info)" 
         :selected="select" 
