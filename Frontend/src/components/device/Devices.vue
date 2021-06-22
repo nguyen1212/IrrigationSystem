@@ -184,7 +184,6 @@ export default {
   watch:{
     PlotId: function(newVal){
       this.PlotId = newVal
-      this.items = []
       // this.getDevice()
     },
     selectedType: function(newType){

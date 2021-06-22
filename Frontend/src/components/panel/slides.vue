@@ -41,6 +41,8 @@
 </template>
 
 <script>
+  import {bus} from '../../main'
+  import axios from 'axios'
   export default {
     props: {
       ws: WebSocket,
@@ -67,10 +69,32 @@
           { value: 'Beijing', text: 'Beijing' },
         ],
         modes: [
-          {value: 'auto', text: 'Auto Mode'},
-          {value: 'manual', text: 'Manual Mode'}
-        ]
+          {
+            value: null,
+            text: 'Please select...'
+          },
+          {
+            label: 'Auto Mode',
+            options: []
+          },
+          {
+            label: 'Timer Mode',
+            options: []
+          }]
       }
+    },
+    created(){
+      bus.$on('autoPresets', (autoPresets) => {
+        this.modes[1].options = []
+        for (let i = 0; i < autoPresets.length; i++){
+          this.modes[1].options.push({
+            value: {preset: autoPresets[i], mode: 'auto'}, 
+            text: autoPresets[i]['name']})
+        }
+      })
+    },
+    destroyed(){
+      bus.$off('autoPresets')
     },
     methods: {
       onSlideStart() {
@@ -101,8 +125,26 @@
           })
         )
       },
-      switchPlot(selectedPlot){
-        this.$emit('plotSelection', selectedPlot)
+      choosePreset(modeType, preset){
+        // var self = this
+        axios.post("url/modeType",{
+          preset
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => window.alert(`Error while handling PUT request: ${error}` ))
+      }
+    },
+    watch:{
+      selectedPlot: function(newPlot){
+        this.selectedPlot = newPlot
+        this.$emit('plotSelection', this.selectedPlot)
+      },
+      selectedMode: function(newMode){
+        this.selectedMode = newMode
+        console.log(newMode.mode, newMode.preset)
+        // this.choosePreset(newMode.mode, newMode.preset)
       }
     },
   }

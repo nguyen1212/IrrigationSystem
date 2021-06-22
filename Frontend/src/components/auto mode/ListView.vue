@@ -10,7 +10,7 @@
       </b-row>
       <!-- magic -->
       <div :set="count = 0"></div>
-      <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in obj" :set="count=count+1">
+      <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in JSON.parse(this.info)" :set="count=count+1">
         <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle="'collapse-' + count" href="#">
             <b-col class="col-1">
               {{count}}
@@ -147,9 +147,9 @@ export default {
   components: {
   },
   data() {
-      var obj = JSON.parse(this.info)
+      // var obj = JSON.parse(this.info)
     return {
-      obj,
+      obj: '',
       i: 0,
       addform : {
         name: '',
@@ -201,7 +201,7 @@ export default {
         this.editform.notes=""
         console.log("form reset")
       },
-  }
+  },
 }
 </script>
 

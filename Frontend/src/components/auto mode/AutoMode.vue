@@ -15,18 +15,23 @@
 
 <script>
 import axios from 'axios'
+import {bus} from '../../main'
 import ListView from '../auto mode/ListView.vue'
 export default {
+    name: 'autoMode',
+    props:{
+      UserId: String,
+      PlotId: String,
+    },
     data() {
         return {
             info: [],
-            select: 1
+            select: 2
         }
     },
     created() { 
-      this.handleGetPresetList();
+      // this.handleGetPresetList();
     },
-    name: 'autoMode',
     methods: {
       handleGetPresetList()
       {
@@ -45,7 +50,7 @@ export default {
             this.select = response.selectedPreset
         })
         .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
-        /* this.info = [
+          this.info = [
             {
                 "id": 0,
                 "name": "Daisy Preset",
@@ -72,7 +77,8 @@ export default {
             }
         ]
         this.select=1
-        console.log("new preset list fetched")*/
+        console.log("new preset list fetched")
+        bus.$emit('autoPresets', this.info)
       },
       handleAddPreset(form)
       {
@@ -117,6 +123,12 @@ export default {
          this.handleGetPresetList();
          })
           .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
+      },
+    },
+    watch: {
+      PlotId: function(newPlot){
+        this.PlotId = newPlot
+        this.handleGetPresetList()
       }
     },
     components: {

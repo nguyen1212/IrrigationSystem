@@ -1,22 +1,22 @@
 <template>
-<div id="app" class="container-fluid h-100">
-  <div id="homepage" class="d-flex flex-column h-100 ">
+<div id="app" class="container-fluid d-flex flex-column vh-100 overflow-hidden">
+  <!-- <div id="homepage" class="d-flex flex-column h-100 "> -->
     <!-- <div class="d-flex flex-column h-100 "> -->
-    <div class="row ">
+    <div class="row">
       <panel @plotSelection="switchPlot" :PlotId="this.PlotId" :UserId="this.UserId"/>
     </div>
-    <div class="row flex-grow-1" >
-      <div class="col-3">
+    <div class="row flex-grow-1 overflow-hidden" >
+      <div class="col-3 mh-100">
         <mainMenu style="height:100%; width: 100%;" v-on:changefeature="switchFeature"></mainMenu>
       </div>
-      <div class="col">
+      <div class="col mh-100 overflow-auto">
         <keep-alive>
-          <component style="height:100%; width: 100%;" v-bind:is="component" :PlotId="this.PlotId" :UserId="this.UserId"/>
+          <component v-on:changefeature="switchFeature" v-bind:is="component" :PlotId="this.PlotId" :UserId="this.UserId"/>
         </keep-alive>
       </div>
     </div>
     <!-- </div> -->
-  </div>
+  <!-- </div> -->
 </div>  
 </template>
 
@@ -51,6 +51,8 @@ export default {
 </script>
 
 <style>
+html, body{height:100%}
+
 .my-sidebar.b-sidebar-outer {
     position: absolute !important;
     height: 100% !important;
@@ -62,6 +64,5 @@ export default {
     height: 100% !important;
     width: 100% !important;
 }
-html,body{height:100%;}
 
 </style>

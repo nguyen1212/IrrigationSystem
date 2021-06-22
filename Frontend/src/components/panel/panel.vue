@@ -1,5 +1,5 @@
 <template>
-  <mdb-card class="card-body" style="width: 100%; ">
+  <mdb-card class="card-body" style="width: 100%;">
     <mdb-card-title>
         <span style="float:left; color: white;">{{this.date}}</span>
         <span style="float:right; color: white;">

@@ -23,6 +23,7 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueRouter)
+export const bus = new Vue();
 
 new Vue({
   router,
