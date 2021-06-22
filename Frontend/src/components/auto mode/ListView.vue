@@ -18,12 +18,6 @@
             <b-col class="leftalign col-3">{{o.name}}</b-col>
             <b-col class="leftalign col-5 description"><i style="color: gray">{{o.notes}}</i></b-col>
             <b-col class="pr-2 col-3">
-              <!-- <div v-if="selected === o.id">
-                <b-button variant="success">Selected</b-button>
-              </div>
-              <div v-else>
-                <b-button variant="outline-primary">&nbsp;&nbsp;Apply&nbsp;&nbsp;</b-button>
-              </div> -->
               <div v-if="selected === o.id">
                 <span class="active-dot" v-b-popover.hover.top="'Active'"></span>
               </div>
@@ -48,7 +42,7 @@
             <div class="ml-3"></div>
             <!-- <b-button v-if="selected !== o.id" class="col-1 ml-3" variant="primary" @click="$emit('select-preset', o.id)" >Select</b-button> -->
             <b-button class="col-1 ml-3" variant="warning" v-b-toggle="'collapse-inner-' + count" @click="resetEditForm">Edit</b-button>
-            <b-button v-if="selected !== o.id" class="col-1 ml-3" variant="dark" @click="$emit('delete-preset', o.id)" >Delete</b-button>
+            <b-button v-if="selected !== o.id" class="col-1 ml-3" variant="dark" @click="handleDeletePreset(o.id, o.name)" >Delete</b-button>
           </div>
           <div>
           <b-collapse class='w-100  mt-3' :id="'collapse-inner-' + count">
@@ -56,31 +50,38 @@
             <b-form 
               @submit="handleUpdatePreset" 
               @reset="resetEditForm">
-            <b-form-group id="input-group-1" label="Preset Name" label-for="input-1">
+            <b-form-group style="width: 300px;">
+              <label :for="'input-1-' + count" style="width: 300px;" class="leftalign"><b>Preset Name</b></label>
               <b-form-input
                 :id="'input-1-' + count"
+                :placeholder="o.name"
                 v-model="editform.name"
-                placeholder="Enter name"
                 required
-              ></b-form-input>
+              >
+              </b-form-input>
             </b-form-group>
-            <b-form-group id="input-group-2" label="Moisture" label-for="input-2">
+            <b-form-group style="width: 300px;">
+              <label :for="'input-2-' + count"  style="width: 300px;" class="leftalign"><b>Moisture</b></label>
               <b-form-spinbutton 
               :id="'input-2-' + count" 
+              :value="o.moistureThreshold"
               v-model="editform.moisture"
               min="1" 
               max="100"></b-form-spinbutton>
             </b-form-group>
 
-              <b-form-group id="input-group-3" label="Notes" label-for="input-3">
+              <b-form-group>
+              <label :for="'input-3-' + count" class="leftalign w-100"><b>Notes</b></label>
               <b-form-textarea
               :id="'input-3-' + count"
-                v-model="editform.notes"
-              placeholder="Default textarea"
+              :placeholder="o.notes"
+              v-model="editform.notes"
             ></b-form-textarea>
             </b-form-group>
+            <div class="leftalign w-100">           
             <b-button type="submit" variant="primary" class="mr-3">Submit</b-button>
             <b-button type="reset" variant="danger">Reset</b-button>
+            </div>
             </b-form>
           </b-card>
         </b-collapse></div>
@@ -101,11 +102,12 @@
             </b-col>
         </b-link>
         <b-collapse class="w-100" id="collapse_add" accordion="my-accordion"  role="tabpanel">
-          <b-card class="border-0 ml-0 w-100">
+          <b-card class="ml-0 mt-3 w-100">
             <b-form 
               @submit="handleAddPreset" 
               @reset="resetAddForm">
-            <b-form-group id="input-group-1" label="Preset Name" label-for="input-1">
+            <b-form-group style="width: 300px;">
+              <label for="input-1" style="width: 300px;" class="leftalign"><b>Preset Name</b></label>
               <b-form-input
                 id="input-1"
                 v-model="addform.name"
@@ -113,7 +115,8 @@
                 required
               ></b-form-input>
             </b-form-group>
-            <b-form-group id="input-group-2" label="Moisture" label-for="input-2">
+            <b-form-group style="width: 300px;">
+              <label for="input-2"  style="width: 300px;" class="leftalign"><b>Moisture</b></label>
               <b-form-spinbutton 
               id="input-2" 
               v-model="addform.moisture"
@@ -121,15 +124,18 @@
               max="100"></b-form-spinbutton>
             </b-form-group>
 
-              <b-form-group id="input-group-3" label="Notes" label-for="input-3">
+            <b-form-group>
+              <label :for="input-3" class="leftalign w-100"><b>Notes</b></label>
               <b-form-textarea
               id="input-3"
                 v-model="addform.notes"
               placeholder="Default textarea"
             ></b-form-textarea>
             </b-form-group>
+            <div class="leftalign w-100">           
             <b-button type="submit" variant="primary" class="mr-3">Submit</b-button>
             <b-button type="reset" variant="danger">Reset</b-button>
+            </div>
             </b-form>
         </b-card>
         
@@ -187,19 +193,30 @@ export default {
         // console.log(this.addform.notes)
         
       },   
+      handleDeletePreset(id, name)
+      {
+        
+        let cnf = window.confirm(`Delete ${name}?`)
+        if (cnf)
+        {
+          // console.log("ok")
+          this.$emit('delete-preset', id)
+        }
+        
+      },   
       resetAddForm()
       {
         this.addform.name=""
         this.addform.moisture=0
         this.addform.notes=""
-        console.log("form reset")
+        // console.log("form reset")
       },
       resetEditForm()
       {
         this.editform.name=""
         this.editform.moisture=0
         this.editform.notes=""
-        console.log("form reset")
+        // console.log("form reset")
       },
   },
 }

@@ -5,7 +5,7 @@
       <template #header="{}">
        <div style="width: 100%;">
         <strong style="float:left;">Menu</strong>
-        <b-button style="float:right;" size="sm" @click="hide"><b-icon icon="list" aria-hidden="true"></b-icon></b-button>
+        <!-- <b-button style="float:right;" size="sm" @click="hide"><b-icon icon="list" aria-hidden="true"></b-icon></b-button> -->
        </div>
       </template>
       <template>

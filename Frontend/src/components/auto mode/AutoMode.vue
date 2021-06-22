@@ -1,6 +1,7 @@
 <template>
-    <div>
-      <div class="pt-g5">
+    <div class="pt-5">
+      <h1><b>Auto Preset</b></h1>
+      <div v-if="this.PlotId != ''" class="pt-5">
         <ListView
         :info="JSON.stringify(this.info)" 
         :selected="select" 
@@ -30,8 +31,13 @@ export default {
         }
     },
     created() { 
-      if (this.PlotId != ''){
+      if (this.PlotId != '')
+      {
         this.handleGetPresetList();
+      }
+      else
+      {
+        window.alert("Please select a plot!")
       }
     },
     methods: {
@@ -40,14 +46,6 @@ export default {
         axios
         .get('url')
         .then((response) => {
-            /**
-             * response: {
-              * presetContent: {
-              *      ****** content
-              * }
-              * selectedPreset: Number
-             * } 
-             */
             this.info = response.presetContent
             this.select = response.selectedPreset
         })
@@ -78,7 +76,7 @@ export default {
                 "notes": "Bay leaves are delicious"
             }
         ]
-        this.select=1
+        this.select = 1
         console.log("new preset list fetched")
         bus.$emit('autoPresets', this.info)
       },
