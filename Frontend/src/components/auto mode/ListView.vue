@@ -48,7 +48,7 @@
           <b-collapse class='w-100  mt-3' :id="'collapse-inner-' + count">
           <b-card class="ml-0">
             <b-form 
-              @submit="handleUpdatePreset" 
+              @submit="handleUpdatePreset(o.id)" 
               @reset="resetEditForm">
             <b-form-group style="width: 300px;">
               <label :for="'input-1-' + count" style="width: 300px;" class="leftalign"><b>Preset Name</b></label>
@@ -107,27 +107,27 @@
               @submit="handleAddPreset" 
               @reset="resetAddForm">
             <b-form-group style="width: 300px;">
-              <label for="input-1" style="width: 300px;" class="leftalign"><b>Preset Name</b></label>
+              <label for="input-add-1" style="width: 300px;" class="leftalign"><b>Preset Name</b></label>
               <b-form-input
-                id="input-1"
+                id="input-add-1"
                 v-model="addform.name"
                 placeholder="Enter name"
                 required
               ></b-form-input>
             </b-form-group>
             <b-form-group style="width: 300px;">
-              <label for="input-2"  style="width: 300px;" class="leftalign"><b>Moisture</b></label>
+              <label for="input-add-2"  style="width: 300px;" class="leftalign"><b>Moisture</b></label>
               <b-form-spinbutton 
-              id="input-2" 
+              id="input-add-2" 
               v-model="addform.moisture"
               min="1" 
               max="100"></b-form-spinbutton>
             </b-form-group>
 
             <b-form-group>
-              <label :for="input-3" class="leftalign w-100"><b>Notes</b></label>
+              <label for="input-add-3" class="leftalign w-100"><b>Notes</b></label>
               <b-form-textarea
-              id="input-3"
+              id="input-add-3"
                 v-model="addform.notes"
               placeholder="Default textarea"
             ></b-form-textarea>
@@ -178,26 +178,39 @@ export default {
       handleAddPreset(event)
       {
         event.preventDefault()
-        this.$emit('add-preset', this.addform)
+        this.$emit('add-preset', {
+            'type': 'Auto',
+            'content': this.addform
+          })
         // console.log(this.addform.name)
         // console.log(this.addform.moisture)
         // console.log(this.addform.notes)
         
       },            
-      handleUpdatePreset(event)
+      handleUpdatePreset(id, event)
       {
         event.preventDefault()
-        this.$emit('update-preset', this.editform)
-        // console.log(this.addform.name)
-        // console.log(this.addform.moisture)
-        // console.log(this.addform.notes)
+        
+        var cnf = window.confirm(`Update preset with id ${id}?`)
+        if (cnf == true)
+        {
+          // console.log("ok")
+          this.$emit('update-preset', {
+            'type': 'Auto',
+            'id': id,
+            'content': this.editform
+          })
+        }
+        // console.log(this.editform.name)
+        // console.log(this.editform.moisture)
+        // console.log(this.editform.notes)
         
       },   
       handleDeletePreset(id, name)
       {
         
-        let cnf = window.confirm(`Delete ${name}?`)
-        if (cnf)
+        var cnf = window.confirm(`Delete ${name}?`)
+        if (cnf == true)
         {
           // console.log("ok")
           this.$emit('delete-preset', id)
