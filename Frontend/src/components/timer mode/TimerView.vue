@@ -47,7 +47,7 @@
                     <div class="ml-3"/>
                     <b-button v-if="repeatSelected !== o.id" class="col-1 ml-3" variant="success" @click="$emit('select-repeat-preset', o.id)" >Select</b-button>
                     <b-button class="col-1 ml-3" variant="dark" v-b-toggle="'repeatCollapse-inner-' + repeatCount" @click="resetEditForm">Edit</b-button>
-                    <b-button class="col-1 ml-3" variant="danger" @click="$emit('delete-repeat-preset', o.id)">Delete</b-button>
+                    <b-button v-if="repeatSelected !== o.id" class="col-1 ml-3" variant="danger" @click="$emit('delete-repeat-preset', o.id)">Delete</b-button>
                   </div>
                   <div>
                     <b-collapse class='w-100  mt-3' :id="'repeatCollapse-inner-' + repeatCount">
@@ -213,7 +213,7 @@
                     <div class="ml-3"/>
                     <b-button v-if="intervalSelected !== o.id" class="col-1 ml-3" variant="success" @click="$emit('select-interval-preset', o.id)" >Select</b-button>
                     <b-button class="col-1 ml-3" variant="dark" v-b-toggle="'intervalCollapse-inner-' + intervalCount" @click="resetEditForm">Edit</b-button>
-                    <b-button class="col-1 ml-3" variant="danger" @click="$emit('delete-interval-preset', o.id)">Delete</b-button>
+                    <b-button v-if="intervalSelected !== o.id" class="col-1 ml-3" variant="danger" @click="$emit('delete-interval-preset', o.id)">Delete</b-button>
                   </div>
                   <div>
                     <b-collapse class='w-100  mt-3' :id="'intervalCollapse-inner-' + intervalCount">
