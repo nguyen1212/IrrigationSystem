@@ -46,9 +46,9 @@
           </div>
           <div class="w-100 row">
             <div class="ml-3"></div>
-            <b-button v-if="selected !== o.id" class="col-1 ml-3" variant="primary" @click="$emit('select-preset', o.id)" >Select</b-button>
+            <!-- <b-button v-if="selected !== o.id" class="col-1 ml-3" variant="primary" @click="$emit('select-preset', o.id)" >Select</b-button> -->
             <b-button class="col-1 ml-3" variant="warning" v-b-toggle="'collapse-inner-' + count" @click="resetEditForm">Edit</b-button>
-            <b-button class="col-1 ml-3" variant="dark" @click="$emit('delete-preset', o.id)">Delete</b-button>
+            <b-button v-if="selected !== o.id" class="col-1 ml-3" variant="dark" @click="$emit('delete-preset', o.id)" >Delete</b-button>
           </div>
           <div>
           <b-collapse class='w-100  mt-3' :id="'collapse-inner-' + count">
