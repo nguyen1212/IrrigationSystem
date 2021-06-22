@@ -1,34 +1,36 @@
 <template>
   <div class="waterlog">
-    <div class="date-select">
-      <date-picker
-        v-model="range"
-        lang="en"
-        range
-        type="date"
-        format="DD/MM/YYYY"
-        range-separator=" - "
-        width="500"
-      ></date-picker>
-    </div>
-    <!-- DISPLAY GRAPH -->
-    <div class="row graph-content">
-      <div class="col-12">
-        <apexchart
-          ref="waterlogchart"
-          type="bar"
-          height="400"
-          :options="chartOptions"
-          :series="series"
-        ></apexchart>
+    <div class="col">
+      <div class="date-select">
+        <date-picker
+          v-model="range"
+          lang="en"
+          range
+          type="date"
+          format="DD/MM/YYYY"
+          range-separator=" - "
+          width="500"
+        ></date-picker>
       </div>
-    </div>
-    <div class="row info-content">
-      <div class="col-2">
-        <div class="row justify-content-center"><b>Average</b></div>
-        <div class="row justify-content-center">
-          <b-icon icon="droplet-fill" style="color: #2e93fa"></b-icon>
-          {{ this.avg }}ml/Day
+      <!-- DISPLAY GRAPH -->
+      <div class="row graph-content">
+        <div class="col-12">
+          <apexchart
+            ref="waterlogchart"
+            type="bar"
+            height="400"
+            :options="chartOptions"
+            :series="series"
+          ></apexchart>
+        </div>
+      </div>
+      <div class="row info-content">
+        <div class="col-2">
+          <div class="row justify-content-center"><b>Average</b></div>
+          <div class="row justify-content-center">
+            <b-icon icon="droplet-fill" style="color: #2e93fa"></b-icon>
+            {{ this.avg }}ml/Day
+          </div>
         </div>
       </div>
     </div>
@@ -41,6 +43,7 @@ import VueApexCharts from "vue-apexcharts";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 export default {
+  name: 'waterLog',
   components: {
     DatePicker,
     apexchart: VueApexCharts,

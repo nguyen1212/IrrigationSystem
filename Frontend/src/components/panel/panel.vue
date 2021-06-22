@@ -3,7 +3,7 @@
     <mdb-card-title>
         <span style="float:left; color: white;">{{this.date}}</span>
         <span style="float:right; color: white;">
-          <p> User Name
+          <p> {{UserId}}
           <b-button style="float:right;" class="ml-3" size="sm" @click="logout" ><b-icon icon="power" aria-hidden="true"></b-icon>Log out</b-button>
           </p>
           <!-- <p v-html='content'></p> -->
@@ -44,7 +44,7 @@
     created: function(){
       var self = this
       var tmp = ''
-      this.connect()
+      this.connectWebsocket()
       this.dateTimeFunc = setInterval(()=>{
         tmp = self.currentDateTime()
         this.date = tmp.split("|")[0]
@@ -67,7 +67,8 @@
         const dateTime = 'Date: ' + date +'|'+ 'Time: ' + time;
         return dateTime;
       },
-      logout() {
+      async logout() {
+        await this.closeWebsocket();
         firebase
             .auth()
             .signOut()
@@ -79,12 +80,11 @@
                 this.$router.push('/');
             });
       },
-      connect(){
+      connectWebsocket(){
         var self = this;
         console.log("Starting connection to WebSocket Server")
         var url = 'ws://' + "127.0.0.1:8080" + '/devices/ws'
-        this.ws = new WebSocket(url);
-        // this.ws.addEventListener()
+        this.ws= new WebSocket(url);
         this.ws.onopen = function(event) {
           console.log(event)
           console.log("Successfully connected to the echo websocket server...")
@@ -98,6 +98,15 @@
           self.ws.close()}
         )
       },  
+      async closeWebsocket(){
+        try{
+          await this.ws.close();
+          console.log("Successfully closed websocket...")
+        }
+        catch(error){
+          console.log(error.message)
+        }
+      }
     },
     beforeDestroy () {
       clearInterval(this.dateTimeFunc)

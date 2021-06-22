@@ -50,7 +50,6 @@ type DeviceMsg struct {
 }
 
 func handleWSConnections(w http.ResponseWriter, r *http.Request) {
-
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -79,7 +78,9 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 		// Read in a new message as JSON and map it to a Message object
 		err := ws.ReadJSON(&msg)
 		if err != nil {
-			log.Fatal(err)
+			ws.Close()
+			client.Disconnect(250)
+			log.Printf("%v", err)
 			return
 		}
 		if msg.Data == "1" {
@@ -165,7 +166,7 @@ func checkError(err error) {
 }
 
 func dbConnect() (*sql.DB, error) {
-	db, err := sql.Open("mysql", "root:trannguyen121223@tcp(127.0.0.1:3306)/device_database")
+	db, err := sql.Open("mysql", "root:password@tcp(127.0.0.1:3306)/device_database")
 	if err != nil {
 		return db, err
 	}
@@ -179,10 +180,10 @@ func addRouter(r *mux.Router) *mux.Router {
 
 func main() {
 
-	db, err := dbConnect()
-	checkError(err)
-	fmt.Println("Database successfully connected")
-	defer db.Close()
+	db, _ := dbConnect()
+	// checkError(err)
+	// fmt.Println("Database successfully connected")
+	// defer db.Close()
 
 	dataServer := &data.Data{
 		Router:   mux.NewRouter().StrictSlash(true),

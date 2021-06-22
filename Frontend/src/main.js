@@ -24,7 +24,6 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueRouter)
 
-
 new Vue({
   router,
   render: h => h(App),

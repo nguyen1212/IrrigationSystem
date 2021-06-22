@@ -7,7 +7,7 @@
     </div>
     <div class="row flex-grow-1" >
       <div class="col-3">
-        <testmenu style="height:100%; width: 100%;" v-on:changefeature="switchFeature"></testmenu>
+        <mainMenu style="height:100%; width: 100%;" v-on:changefeature="switchFeature"></mainMenu>
       </div>
       <div class="col">
         <keep-alive>
@@ -28,11 +28,16 @@ export default {
 
   data() { return {
     component: '',
-    UserId: 'pod-yone',
+    UserId: '',
     PlotId: '',
-  } },
+    } 
+  },
 
-  components: {testmenu:Menu, panel: Panel},
+  created(){
+    this.UserId = this.$route.params.UserId
+  },
+
+  components: {mainMenu:Menu, panel: Panel},
 
   methods: {
     switchFeature(feature){

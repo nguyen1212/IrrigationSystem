@@ -6,23 +6,17 @@
       </div>
       <div class="col">
         <p> <strong> Device Information </strong></p>
-        <div style="width: 100%; ">
-        <div>
-          <p>Type: <b-form-select style="width: 80%; float: right;" v-model="selectedType" :options="types"></b-form-select></p>
-        </div>
-        <div>
-          <p>Name: <b-form-select style="width: 80%; float: right;" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedType === null"></b-form-select></p>
-        </div>
-        <div>
-          <p>Date: <b-form-datepicker style="width: 80%; float: right;" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
-        </div>
+        <div style="width: 100%; text-align: left;">
+          <p>Type: <b-form-select style="width: 80%; float: right; margin-right: 5%" v-model="selectedType" :options="types"></b-form-select></p>
+          <p>Name: <b-form-select style="width: 80%; float: right; margin-right: 5%" v-model="selectedDevice" :options="selectedDeviceList" v-bind:disabled="selectedType === null"></b-form-select></p>
+          <p>Date: <b-form-datepicker style="width: 80%; float: right; margin-right: 5%" v-model="date"  :disabled="selectedDevice === null"></b-form-datepicker></p>
         </div>
         <br>
         <hr/>
         <p> <strong> Statistics </strong> </p>
-        <div style="float: left">
-          <p> Highest: {{this.max}} - {{this.maxTime}}</p>
-          <p> Lowest: {{this.min}} - {{this.minTime}}<p>
+        <div style="text-align: left">
+          <p id="highest"> Highest:</p>
+          <p id="lowest"> Lowest:<p>
           <p id="avg">Average: </p>
         </div>
       </div>
@@ -84,7 +78,8 @@ export default {
             toolbar: {
               tools:{
                 reset: false,
-                download: false
+                download: false,
+                pan: false,
               },
               autoSelected: 'zoom'
             }
@@ -165,9 +160,11 @@ export default {
           data: response.data.Data
         }]
         if (this.selectedType == 'temp')
-          document.getElementById("avg").innerHTML = 'Average:' + this.avg + '&deg;' + 'C - ' + this.date;
+          document.getElementById("avg").innerHTML = 'Average:' + this.avg + '&deg;' + 'C';
         else
-          document.getElementById("avg").innerHTML = 'Average:' + this.avg + '%' + ' - ' + this.date;
+          document.getElementById("avg").innerHTML = 'Average:' + this.avg + '%';
+        document.getElementById("highest").innerHTML = 'Highest: ' + this.max  + ' - ' + this.maxTime.slice(0, -5);
+        document.getElementById("lowest").innerHTML = 'Lowest: ' + this.min  + ' - ' + this.minTime.slice(0, -5);
       })
       .catch((error)=>{
         window.alert(`Cannot plot data due to error: ${error}`)
@@ -177,6 +174,11 @@ export default {
       this.series = [{
           data: []
       }]
+    },
+    clearAvgData(){
+      document.getElementById("avg").innerHTML = 'Average:';
+      document.getElementById("highest").innerHTML = 'Highest:';
+      document.getElementById("lowest").innerHTML = 'Lowest:';
     }
   },
   watch:{
@@ -188,7 +190,7 @@ export default {
     selectedType: function(newType){
       this.selectedType = newType
       if (newType == 'temp'){
-        this.unit = '\'&deg;\''
+        this.clearAvgData();
         this.chartOptions = {
           yaxis:{
             title:{
@@ -203,8 +205,7 @@ export default {
         this.selectedDeviceList = this.tempDevices;
       }
       else{
-        document.getElementById("avg").innerHTML = 'Average:' + this.avg + '&deg;' + 'C - ' + this.date;
-        this.unit = '%'
+        this.clearAvgData();
         this.chartOptions = {
           yaxis:{
             title:{
@@ -223,6 +224,7 @@ export default {
       }
     },
     selectedDevice: function(newDevice){
+      this.clearAvgData();
       this.selectedDevice = newDevice
       this.deviceName = newDevice
       if (newDevice != "SOIL")

@@ -32,8 +32,12 @@ type DeviceListRequest struct {
 
 type DeviceInfoResponse struct {
 	Name string `json:"Name"`
-	Id   string `json:"Id"`
-	Type string `json:"Type"`
+}
+
+type DeviceListResponse struct {
+	SoilDevices  []DeviceInfoResponse `json:"soilDevices"`
+	HumidDevices []DeviceInfoResponse `json:"humidDevices"`
+	TempDevices  []DeviceInfoResponse `json:"tempDevices"`
 }
 
 type DeviceDataRequest struct {
@@ -105,10 +109,8 @@ func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 
 	var feedKey string
 	if deviceDataReq.Type == "soil" {
-		// feedKey = "soilmoist"
 		feedKey = "bk-iot-soil"
 	} else {
-		// feedKey = "temphumid"
 		feedKey = "bk-iot-temp-humid"
 	}
 	url := fmt.Sprintf("https://io.adafruit.com/api/v2/CSE_BBC/feeds/%s/data?start_time=%s&end_time=%s&include=value,created_at", feedKey, deviceDataReq.Start_time, deviceDataReq.End_time)
