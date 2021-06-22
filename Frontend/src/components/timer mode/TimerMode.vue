@@ -23,7 +23,11 @@
 <script>
 import axios from 'axios'
 import TimerView from '../timer mode/TimerView.vue'
+import {bus} from '../../main'
 export default {
+    props:{
+      PlotId: String,
+    },
     data() {
         return {
             repeatContent: [],
@@ -35,8 +39,10 @@ export default {
         }
     },
     created() { 
-      this.handleGetRepeatPresetList();
-      this.handleGetIntervalPresetList();
+      if (this.PlotId != ''){
+        this.handleGetRepeatPresetList();
+        this.handleGetIntervalPresetList();
+      }
     },
     name: 'timerMode',
     methods: {
@@ -89,6 +95,7 @@ export default {
       ],
       this.repeatSelect = 1
       console.log("new preset list fetched")
+      bus.$emit('timerPreset', this.repeatContent)
       },
 
       handleGetIntervalPresetList()
@@ -228,7 +235,21 @@ export default {
         .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
       }
     },
-    
+    watch:{
+      repeatContent: function(newContent){
+        this.repeatContent = newContent
+        bus.$emit('timerPresets', newContent.concat(this.intervalContent))
+      },
+      intervalContent: function(newContent){
+        this.intervalContent = newContent
+        bus.$emit('timerPresets', this.intervalContent.concat(newContent))
+      },
+      PlotId: function(newPlot){
+        this.PlotId = newPlot
+        this.handleGetRepeatPresetList();
+        this.handleGetIntervalPresetList();
+      }
+    },
     components: {
         TimerView
     }

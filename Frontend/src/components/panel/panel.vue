@@ -1,5 +1,5 @@
 <template>
-  <mdb-card class="card-body" style="width: 100%; ">
+  <mdb-card class="card-body" style="width: 100%;">
     <mdb-card-title>
         <span style="float:left; color: white;">{{this.date}}</span>
         <span style="float:right; color: white;">
@@ -63,7 +63,7 @@
       currentDateTime() {
         const current = new Date();
         const date = current.getDate() + '-' + (current.getMonth() + 1) + '-' + current.getFullYear();
-        const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+        const time = current.getHours() + ":" + ((current.getMinutes() < 10) ? '0':'')+ current.getMinutes() + ":" + ((current.getSeconds() < 10) ? '0':'') + current.getSeconds();
         const dateTime = 'Date: ' + date +'|'+ 'Time: ' + time;
         return dateTime;
       },

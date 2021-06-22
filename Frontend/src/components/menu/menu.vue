@@ -66,28 +66,28 @@
   </div>
 </template>
 <script>
-    import {mdbCard} from 'mdbvue';
-    import home from '../home/Home.vue';
-    import autoMode from '../auto mode/AutoMode.vue';
-    import waterLog from '../water log/WaterLog.vue';
-    import timerMode from '../timer mode/TimerMode.vue';
-    import devices from '../device/Devices.vue';
-    export default{
-        name: 'Menu',
-        data(){return{
-          home: home,
-          autoMode: autoMode,
-          waterLog: waterLog,
-          timerMode: timerMode,
-          devices: devices
-        }},
-        components: mdbCard,
-        methods: {
-          selectFeature(feature){
-              this.$emit('changefeature', feature)
-          }
-        }
+import {mdbCard} from 'mdbvue';
+import home from '../home/Home.vue';
+import autoMode from '../auto mode/AutoMode.vue';
+import waterLog from '../water log/WaterLog.vue';
+import timerMode from '../timer mode/TimerMode.vue';
+import devices from '../device/Devices.vue';
+export default{
+  name: 'Menu',
+  data(){return{
+    home: home,
+    autoMode: autoMode,
+    waterLog: waterLog,
+    timerMode: timerMode,
+    devices: devices
+  }},
+  components: mdbCard,
+  methods: {
+    selectFeature(feature){
+        this.$emit('changefeature', feature)
     }
+  }
+}
 </script>
 <style scoped>
 .ml-0{
