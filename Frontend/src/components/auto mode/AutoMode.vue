@@ -30,7 +30,9 @@ export default {
         }
     },
     created() { 
-      // this.handleGetPresetList();
+      if (this.PlotId != ''){
+        this.handleGetPresetList();
+      }
     },
     methods: {
       handleGetPresetList()

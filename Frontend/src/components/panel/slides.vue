@@ -23,7 +23,7 @@
         <template>
           <div>
             <div><b-button variant="dark" size="lg" @click="send" ><b-icon icon="power" aria-hidden="true" scale="2" v-bind:variant="forcemode"></b-icon></b-button></div>
-            <div><b-form-select style="width: 40%; margin-top: 4mm;" v-model="selectedMode" :options="modes" :disabled="selectedPlot===''"></b-form-select></div>
+            <div><b-form-select style="width: 50%; margin-top: 4mm;" v-model="selectedMode" :options="modes" :disabled="selectedPlot===''"></b-form-select></div>
             <div class="info" style="display: flex; justify-content: center;">
               <p> {{soil}}%
               <br> Soil Moisture </p>
@@ -89,7 +89,15 @@
         for (let i = 0; i < autoPresets.length; i++){
           this.modes[1].options.push({
             value: {preset: autoPresets[i], mode: 'auto'}, 
-            text: autoPresets[i]['name']})
+            text: '[Auto] ' + autoPresets[i]['name']})
+        }
+      })
+      bus.$on('timerPresets', (timerPresets) => {
+        this.modes[2].options = []
+        for (let i = 0; i < timerPresets.length; i++){
+          this.modes[2].options.push({
+            value: {preset: timerPresets[i], mode: 'timer'}, 
+            text: '[Timer] ' + timerPresets[i]['name']})
         }
       })
     },

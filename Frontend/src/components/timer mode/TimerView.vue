@@ -14,7 +14,7 @@
             <!-- magic -->
             <div :set="repeatCount = 0"/>
 
-            <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in repeatObj" :set="repeatCount=repeatCount+1">
+            <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in JSON.parse(this.repeatContent)" :set="repeatCount=repeatCount+1">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle="'repeatCollapse-' + repeatCount" href="#">
                 <b-col class="col-1">
                   {{repeatCount}}
@@ -181,7 +181,7 @@
             <!-- magic -->
             <div :set="intervalCount = 0"/>
 
-            <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in intervalObj" :set="intervalCount=intervalCount+1">
+            <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in JSON.parse(this.intervalContent)" :set="intervalCount=intervalCount+1">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle="'intervalCollapse-' + intervalCount" href="#">
                 <b-col class="col-1">
                   {{intervalCount}}
@@ -318,7 +318,7 @@
         </b-container>
       </div>
     </b-tab>
-  </b-tabs card> 
+  </b-tabs> 
 </template>
 
 <script>
