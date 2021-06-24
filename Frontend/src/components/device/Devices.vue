@@ -123,7 +123,11 @@ export default {
         }}
   },
   
-  created: function(){},
+  created: function(){
+    if (this.PlotId != ''){
+      this.getDevice()
+    }
+  },
   methods: {
     getDevice(){
       var self = this
@@ -184,7 +188,7 @@ export default {
   watch:{
     PlotId: function(newVal){
       this.PlotId = newVal
-      // this.getDevice()
+      this.getDevice()
     },
     selectedType: function(newType){
       this.selectedType = newType
