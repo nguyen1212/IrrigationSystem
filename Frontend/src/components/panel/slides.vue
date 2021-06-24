@@ -64,9 +64,6 @@
         plotName: '',
         plots: [
           { value: '', text: 'Please select an option' },
-          { value: 'New York', text: 'New York' },
-          { value: 'California', text: 'California' },
-          { value: 'Beijing', text: 'Beijing' },
         ],
         modes: [
           {
@@ -84,6 +81,7 @@
       }
     },
     created(){
+      this.getPlot()
       bus.$on('autoPresets', (autoPresets) => {
         this.modes[1].options = []
         for (let i = 0; i < autoPresets.length; i++){
@@ -142,7 +140,22 @@
             console.log(response);
         })
         .catch((error) => window.alert(`Error while handling PUT request: ${error}` ))
-      }
+      },
+      getPlot(){
+      var self = this
+      axios.post("http://localhost:8080/devices/data/info",{
+        UserId: self.UserId
+      })
+      .then((response)=>{
+        var newPlot = [{value: response.data.Id, text: response.data.PlotName}]
+        this.plots = [{ value: '', text: 'Please select an option' }].concat(newPlot) 
+
+        // console.log(this.items[0])
+      })
+      .catch((error)=>{
+        window.alert(`The Database Server returned an error: ${error}`);
+      })
+    },
     },
     watch:{
       selectedPlot: function(newPlot){
