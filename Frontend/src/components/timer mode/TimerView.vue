@@ -38,22 +38,22 @@
                       <li class="leftalign"><b>ID:</b> {{o.id}}</li>
                       <li class="leftalign"><b>Name:</b> {{o.name}}</li>
                       <li class="leftalign"><b>Time:</b> {{o.time}}</li>
-                      <li class="leftalign"><b>Amount:</b> {{o.amount}}</li>
+                      <li class="leftalign"><b>Amount:</b> {{o.amount}} <b>liters</b></li>
                       <li class="leftalign"><b>Repeat:</b> {{o.repeat}}</li>
                       </ul>
                     </div>
                   </div>
                   <div class="w-100 row">
                     <div class="ml-3"/>
-                    <b-button v-if="repeatSelected !== o.id" class="col-1 ml-3" variant="success" @click="$emit('select-repeat-preset', o.id)" >Select</b-button>
+                    <!-- <b-button v-if="repeatSelected !== o.id" class="col-1 ml-3" variant="success" @click="$emit('select-repeat-preset', o.id)" >Select</b-button> -->
                     <b-button class="col-1 ml-3" variant="dark" v-b-toggle="'repeatCollapse-inner-' + repeatCount" @click="resetEditForm">Edit</b-button>
-                    <b-button v-if="repeatSelected !== o.id" class="col-1 ml-3" variant="danger" @click="$emit('delete-repeat-preset', o.id)">Delete</b-button>
+                    <b-button v-if="repeatSelected !== o.id" class="col-1 ml-3" variant="danger" @click="handleRepeatDeletePreset(o.id, o.name)">Delete</b-button>
                   </div>
                   <div>
                     <b-collapse class='w-100  mt-3' :id="'repeatCollapse-inner-' + repeatCount">
                       <b-card class="ml-0">
                         <b-form 
-                          @submit="handleRepeatUpdatePreset" 
+                          @submit="handleRepeatUpdatePreset(o.id)" 
                           @reset="resetEditForm">
                           <b-form-group id="input-group-1" label="Preset Name" label-for="input-1">
                             <b-form-input
@@ -204,14 +204,14 @@
                       <ul>
                       <li class="leftalign"><b>ID:</b> {{o.id}}</li>
                       <li class="leftalign"><b>Name:</b> {{o.name}}</li>
-                      <li class="leftalign"><b>Amount:</b> {{o.amount}}</li>
+                      <li class="leftalign"><b>Amount:</b> {{o.amount}} <b>liters</b></li>
                       <li class="leftalign"><b>Interval:</b> {{o.interval}}</li>
                       </ul>
                     </div>
                   </div>
                   <div class="w-100 row">
                     <div class="ml-3"/>
-                    <b-button v-if="intervalSelected !== o.id" class="col-1 ml-3" variant="success" @click="$emit('select-interval-preset', o.id)" >Select</b-button>
+                    <!-- <b-button v-if="intervalSelected !== o.id" class="col-1 ml-3" variant="success" @click="$emit('select-interval-preset', o.id)" >Select</b-button> -->
                     <b-button class="col-1 ml-3" variant="dark" v-b-toggle="'intervalCollapse-inner-' + intervalCount" @click="resetEditForm">Edit</b-button>
                     <b-button v-if="intervalSelected !== o.id" class="col-1 ml-3" variant="danger" @click="$emit('delete-interval-preset', o.id)">Delete</b-button>
                   </div>
@@ -219,7 +219,7 @@
                     <b-collapse class='w-100  mt-3' :id="'intervalCollapse-inner-' + intervalCount">
                       <b-card class="ml-0">
                         <b-form 
-                          @submit="handleIntervalUpdatePreset" 
+                          @submit="handleIntervalUpdatePreset(o.id)" 
                           @reset="resetEditForm">
                           <b-form-group id="input-group-1" label="Preset Name" label-for="input-1">
                             <b-form-input
@@ -379,24 +379,64 @@ export default {
       handleRepeatAddPreset(event)
       {
         event.preventDefault()
-        this.$emit('add-repeat-preset', this.repeatAddform)
+        this.$emit('add-repeat-preset', {
+          'type': "TimerRepeat",
+          'content': this.repeatAddform
+        })
       },            
-      handleRepeatUpdatePreset(event)
+      handleRepeatUpdatePreset(id,event)
       {
         event.preventDefault()
-        this.$emit('update-repeat-preset', this.repeatEditform)
+        var cnf = window.confirm(`Update preset with id ${id}?`)
+        if (cnf == true)
+        {
+          this.$emit('update-repeat-preset', {
+            'type': 'TimerRepeat',
+            'id': id,
+            'content': this.repeatEditform
+          })
+        }
       },
+
+      handleRepeatDeletePreset(id, name)
+      {
+        var cnf = window.confirm(`Delete ${name}?`)
+        if (cnf == true)
+        {
+          this.$emit('delete-repeat-preset', id)
+        }
+      }, 
 
       handleIntervalAddPreset(event)
       {
         event.preventDefault()
-        this.$emit('add-interval-preset', this.intervalAddform)
+        this.$emit('add-interval-preset', {
+          'type': "TimerInterval",
+          'content': this.intervalAddform
+        })
       },            
-      handleIntervalUpdatePreset(event)
+      handleIntervalUpdatePreset(id,event)
       {
         event.preventDefault()
-        this.$emit('update-interval-preset', this.intervalEditform)
-      },   
+        var cnf = window.confirm(`Update preset with id ${id}?`)
+        if (cnf == true)
+        {
+          this.$emit('update-interval-preset', {
+            'type': 'TimerInterval',
+            'id': id,
+            'content': this.intervalEditform
+          })
+        }
+      },  
+      
+      handleIntervalDeletePreset(id, name)
+      {
+        var cnf = window.confirm(`Delete ${name}?`)
+        if (cnf == true)
+        {
+          this.$emit('delete-interval-preset', id)
+        }
+      }, 
 
       resetAddForm()
       {
