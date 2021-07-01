@@ -85,6 +85,10 @@ export default{
   methods: {
     selectFeature(feature){
         this.$emit('changefeature', feature)
+    },
+    hide(){
+      this.$emit('closemenu')
+      // var btnGroup = document.getElementsByClassName("my-sidebar");
     }
   }
 }
