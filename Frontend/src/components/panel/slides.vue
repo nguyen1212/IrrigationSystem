@@ -132,8 +132,8 @@
         )
       },
       choosePreset(modeType, preset){
-        // var self = this
-        axios.post("url/modeType",{
+        var url = "" + modeType
+        axios.post(url,{
           preset
         })
         .then((response) => {

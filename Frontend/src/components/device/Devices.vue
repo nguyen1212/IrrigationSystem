@@ -1,6 +1,6 @@
 <template>
   <div class="devices">
-    <div class="row">
+    <div class="row" style="padding-left: 15px">
       <div class="col-8" >
         <apexchart type="area" height="400"  :options="chartOptions" :series="series"></apexchart>
       </div>
@@ -141,7 +141,7 @@ export default {
         // console.log(this.items[0])
       })
       .catch((error)=>{
-        window.alert(`The Database Server returned an error: ${error}`);
+        window.alert(`The Database Server returned an ${error}`);
       })
     },
     getDeviceDataMeasurement(){
@@ -171,7 +171,7 @@ export default {
         document.getElementById("lowest").innerHTML = 'Lowest: ' + this.min  + ' - ' + this.minTime.slice(0, -5);
       })
       .catch((error)=>{
-        window.alert(`Cannot plot data due to error: ${error}`)
+        window.alert(`Cannot plot data due to ${error}`)
       })
     },
     clearPlotData(){
@@ -245,7 +245,7 @@ export default {
       yesterday = yesterday.split("T")[0]
       this.start_time = yesterday + "T" + "17:00:00" + "Z"
       this.end_time = this.date + "T" + "17:00:00" + "Z"
-      console.log(this.start_time, this.end_time, this.type)
+      // console.log(this.start_time, this.end_time, this.type)
       this.getDeviceDataMeasurement()
     }
   }
