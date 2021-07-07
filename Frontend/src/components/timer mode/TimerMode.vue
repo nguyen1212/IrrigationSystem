@@ -1,7 +1,6 @@
 <template>
     <div>
       <div class="mt-5">
-      <h1><b>Timer Preset</b></h1>
         <div v-if="this.PlotId != ''" class="pt-5">
           <TimerView
           :repeatContent="JSON.stringify(this.repeatContent)" 
