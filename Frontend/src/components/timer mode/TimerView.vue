@@ -1,30 +1,26 @@
 
 <template>
-  <b-tabs card>
+  <b-tabs>
     <b-tab title="Repeat Mode" active>
       <div class="d-flex justify-content-center">
-        <b-container>
-          <div  class="accordion" role="tablist">
-            <b-row class=" pt-3 pb-3 border-bottom" >
-              <b-col class="col-1"><b>#</b></b-col>
-              <b-col class="leftalign col-3"><b>Name</b></b-col>
+         <b-container>
+          <div class="accordion" role="tablist">
+            <b-row class=" pt-3 pb-3 border-bottom" style = "backgroundColor: orange; color: black" >
+              <b-col class="leftalign col-4" style = "fontWeight: bold">Name</b-col>
               <b-col class="leftalign col-5 middle"/>
-              <b-col class="col-3"><b>Status</b></b-col>
+              <b-col class="col-3" style = "fontWeight: bold">Status</b-col>
             </b-row>
             <!-- magic -->
             <div :set="repeatCount = 0"/>
 
             <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in JSON.parse(this.repeatContent)" :set="repeatCount=repeatCount+1">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle="'repeatCollapse-' + repeatCount" href="#">
-                <b-col class="col-1">
-                  {{repeatCount}}
-                </b-col>
-                <b-col class="leftalign col-3">{{o.name}}</b-col>
-                <b-col class="leftalign col-5 middle"><i style="color: gray">Click to view detail</i></b-col>
+                <b-col class="leftalign col-4">{{o.name}}</b-col>
+                <b-col class="leftalign col-5 middle">Click to view detail</b-col>
                 <b-col class="pr-2 col-3">
                 <div v-if="repeatSelected === o.id">
-                  <span class="active-dot" v-b-popover.hover.top="'Active'"></span>
-                </div>
+                    <b-spinner type="grow" variant small = "false"/>
+                  </div>
                 <div v-else>
                   <span class="inactive-dot" v-b-popover.hover.top="'Inactive'"></span>
                 </div>
@@ -105,12 +101,8 @@
               
             <b-row class="border-bottom" role="tab">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle.repeat_collapse_add href="#">
-                <b-col class="col-1">
-                  <b-icon class="h3 mt-0" icon="plus-circle-fill" style="color: black;" variant="black"/>
-                </b-col>
-
-                <b-col class="leftalign col-3">Add</b-col>
-                <b-col class="leftalign col-5 middle"><i style="color: gray">Click to add</i></b-col>
+                <b-col class="leftalign col-4"/>
+                <b-col class="leftalign col-5 middle" style = "color: black; fontWeight: bold">Click here to add new preset</b-col>
                 <b-col class="pr-2 col-3"/>
               </b-link>
 
@@ -172,25 +164,21 @@
       <div class="d-flex justify-content-center">
         <b-container>
           <div  class="accordion" role="tablist">
-            <b-row class=" pt-3 pb-3 border-bottom" >
-              <b-col class="col-1"><b>#</b></b-col>
-              <b-col class="leftalign col-3"><b>Name</b></b-col>
+            <b-row class=" pt-3 pb-3 border-bottom" style = "backgroundColor: orange; color: black" >
+              <b-col class="leftalign col-4" style = "fontWeight: bold">Name</b-col>
               <b-col class="leftalign col-5 middle"/>
-              <b-col class="col-3"><b>Status</b></b-col>
+              <b-col class="col-3" style = "fontWeight: bold">Status</b-col>
             </b-row>
             <!-- magic -->
             <div :set="intervalCount = 0"/>
 
             <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in JSON.parse(this.intervalContent)" :set="intervalCount=intervalCount+1">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle="'intervalCollapse-' + intervalCount" href="#">
-                <b-col class="col-1">
-                  {{intervalCount}}
-                </b-col>
-                <b-col class="leftalign col-3">{{o.name}}</b-col>
-                <b-col class="leftalign col-5 middle"><i style="color: gray">Click to view detail</i></b-col>
+                <b-col class="leftalign col-4">{{o.name}}</b-col>
+                <b-col class="leftalign col-5 middle">Click to view detail</b-col>
                 <b-col class="pr-2 col-3">
-                  <div v-if="intervalSelected === o.id">
-                    <span class="active-dot" v-b-popover.hover.top="'Active'"/>
+                  <div v-if="repeatSelected === o.id">
+                    <b-spinner type="grow" variant small = "false"/>
                   </div>
                   <div v-else>
                     <span class="inactive-dot" v-b-popover.hover.top="'Inactive'"></span>
@@ -264,11 +252,8 @@
               
             <b-row class="border-bottom" role="tab">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle.interval_collapse_add href="#">
-                <b-col class="col-1">
-                  <b-icon class="h3 mt-0" icon="plus-circle-fill" style="color: black;" variant="black"></b-icon>
-                </b-col>
-                <b-col class="leftalign col-3">Add</b-col>
-                <b-col class="leftalign col-5 middle"><i style="color: gray">Click to add</i></b-col>
+                <b-col class="leftalign col-4"/>
+                <b-col class="leftalign col-5 middle" style = "color: black; fontWeight: bold">Click here to add new preset</b-col>
                 <b-col class="pr-2 col-3"/>
               </b-link>
 
@@ -501,19 +486,20 @@ export default {
 .active-dot {
   height: 20px;
   width: 20px;
-  background-color: #5cb85c;
+  background-color: #00BFA1;
   border-radius: 50%;
   display: inline-block;
 }
 .inactive-dot {
   height: 20px;
   width: 20px;
-  background-color: #f0ad4e;
+  background-color: rgb(255, 166, 0);
   border-radius: 50%;
   display: inline-block;
 }
 a {
-  color: black;
+  color: white;
+  background-color: grey;
 }
 a:hover {
   color: black;
