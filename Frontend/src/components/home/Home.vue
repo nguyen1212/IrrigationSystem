@@ -125,7 +125,7 @@ export default {
   name: 'home',
   data () {
     return {
-      webpage: 'ĐẶT CÁI TÊN TRANG WEB DÙM ĐI',
+      webpage: 'WE CAN\'T SAVE YOUR BRAIN BUT YOUR PLANTS!',
       autoMode: autoMode,
       waterLog: waterLog,
       timerMode: timerMode,
