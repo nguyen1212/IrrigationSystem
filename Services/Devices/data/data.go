@@ -1,21 +1,13 @@
 package data
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
-
-	"github.com/gorilla/mux"
 )
-
-type Data struct {
-	Router   *mux.Router
-	Database *sql.DB
-}
 
 type PlotListRequest struct {
 	UserId string `json:"UserId"`
@@ -45,15 +37,6 @@ type DeviceDataRequest struct {
 	End_time   string `json:"end_time"`
 	DeviceName string `json:"deviceName"`
 	Type       string `json:"type"`
-}
-
-func (db *Data) SetupRouter() {
-	// db.Router.
-	// 	HandleFunc("/devices/data/info", db.handleDeviceDataMsg).
-	// 	Methods("POST", "OPTIONS")
-	db.Router.
-		HandleFunc("/devices/data/log", handlePlotDeviceData).
-		Methods("POST", "OPTIONS")
 }
 
 func checkError(err error) {
@@ -95,7 +78,7 @@ func checkError(err error) {
 // 	w.Write(jsonString)
 // }
 
-func handlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
+func HandlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusOK)
