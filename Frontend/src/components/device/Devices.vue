@@ -130,19 +130,19 @@ export default {
   },
   methods: {
     getDevice(){
-      var self = this
-      axios.post("http://localhost:8080/devices/data/info",{
-        PlotId: self.PlotId
-      })
-      .then((response)=>{
-        this.soilDevices = response.data.soilDevices
-        this.humidDevices = response.data.humidDevices
-        this.tempDevices = response.data.tempDevices
-        // console.log(this.items[0])
-      })
-      .catch((error)=>{
-        window.alert(`The Database Server returned an ${error}`);
-      })
+      // var self = this
+      // axios.post("http://localhost:8080/devices/data/info",{
+      //   PlotId: self.PlotId
+      // })
+      // .then((response)=>{
+      //   this.soilDevices = response.data.soilDevices
+      //   this.humidDevices = response.data.humidDevices
+      //   this.tempDevices = response.data.tempDevices
+      //   // console.log(this.items[0])
+      // })
+      // .catch((error)=>{
+      //   window.alert(`The Database Server returned an ${error}`);
+      // })
     },
     getDeviceDataMeasurement(){
       var self = this

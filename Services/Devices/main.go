@@ -21,5 +21,6 @@ func main() {
 	if token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
+	go subSensor(client)
 	a.Run(":8080")
 }

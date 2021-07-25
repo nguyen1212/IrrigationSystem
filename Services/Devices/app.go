@@ -113,7 +113,6 @@ func handleWSConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	go read(ws, client)
-	go subSensor(client)
 	write(ws)
 
 }
