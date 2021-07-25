@@ -48,8 +48,28 @@ func (a *App) initRoutes() {
 	a.Router.
 		HandleFunc("/devices/data/log", data.HandlePlotDeviceData).
 		Methods("POST", "OPTIONS")
-	a.Router.HandleFunc("/devices/water/on",).Methods("POST")
-	a.Router.HandleFunc("/devices/water/off")
+	a.Router.HandleFunc("/devices/water/on", HandleTurnOn).Methods("GET")
+	a.Router.HandleFunc("/devices/water/off", HandleTurnOff).Methods("GET")
+}
+
+func HandleTurnOn(w http.ResponseWriter, r *http.Request) {
+	adaMsg := &DeviceMsg{
+		Id:   "11",
+		Name: "RELAY",
+		Data: "1",
+		Unit: "",
+	}
+	publish(client, adaMsg)
+}
+
+func HandleTurnOff(w http.ResponseWriter, r *http.Request) {
+	adaMsg := &DeviceMsg{
+		Id:   "11",
+		Name: "RELAY",
+		Data: "0",
+		Unit: "",
+	}
+	publish(client, adaMsg)
 }
 
 func (a *App) Init(user, password, dbname string) {
@@ -91,13 +111,7 @@ func handleWSConnections(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Websocket formed!")
 	defer ws.Close()
-	//Create a new connection to Adafruit Server
-	client := createClient()
 
-	token := client.Connect()
-	if token.Wait() && token.Error() != nil {
-		panic(token.Error())
-	}
 	go read(ws, client)
 	go subSensor(client)
 	write(ws)
@@ -160,7 +174,7 @@ func createClient() mqtt.Client {
 	// Username of Adafruit account -> For demo only
 	opts.SetUsername("MDPSmartFarm")
 	// Key of Adafruit account: Get from MyKey tab -> For demo only
-	opts.SetPassword("")
+	opts.SetPassword("aio_nnpA09HHrye2fisiYQ3YKoY9cyis")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
