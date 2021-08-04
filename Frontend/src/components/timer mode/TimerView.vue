@@ -1,26 +1,29 @@
-
 <template>
-  <b-tabs>
+  <b-tabs card>
     <b-tab title="Repeat Mode" active>
       <div class="d-flex justify-content-center">
-         <b-container>
-          <div class="accordion" role="tablist">
-            <b-row class=" pt-3 pb-3 border-bottom" style = "backgroundColor: orange; color: black" >
-              <b-col class="leftalign col-4" style = "fontWeight: bold">Name</b-col>
+        <b-container>
+          <div  class="accordion" role="tablist">
+            <b-row class=" pt-3 pb-3 border-bottom" >
+              <b-col class="col-1"><b>#</b></b-col>
+              <b-col class="leftalign col-3"><b>Name</b></b-col>
               <b-col class="leftalign col-5 middle"/>
-              <b-col class="col-3" style = "fontWeight: bold">Status</b-col>
+              <b-col class="col-3"><b>Status</b></b-col>
             </b-row>
             <!-- magic -->
             <div :set="repeatCount = 0"/>
 
             <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in JSON.parse(this.repeatContent)" :set="repeatCount=repeatCount+1">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle="'repeatCollapse-' + repeatCount" href="#">
-                <b-col class="leftalign col-4">{{o.name}}</b-col>
-                <b-col class="leftalign col-5 middle">Click to view detail</b-col>
+                <b-col class="col-1">
+                  {{repeatCount}}
+                </b-col>
+                <b-col class="leftalign col-3">{{o.name}}</b-col>
+                <b-col class="leftalign col-5 middle"><i style="color: gray">Click to view detail</i></b-col>
                 <b-col class="pr-2 col-3">
                 <div v-if="repeatSelected === o.id">
-                    <b-spinner type="grow" variant small = "false"/>
-                  </div>
+                  <span class="active-dot" v-b-popover.hover.top="'Active'"></span>
+                </div>
                 <div v-else>
                   <span class="inactive-dot" v-b-popover.hover.top="'Inactive'"></span>
                 </div>
@@ -59,14 +62,12 @@
                             required
                             />
                           </b-form-group>
-
                           <b-form-group id="input-group-2" label="Preset Time" label-for="input-2">
                             <b-form-timepicker
                             :id="'input-2-' + repeatCount"
                             v-model="repeatEditform.time" 
                             />  
                           </b-form-group>
-
                           <b-form-group id="input-group-3" label="Amount" label-for="input-3">
                             <b-form-spinbutton 
                               :id="'input-3-' + repeatCount" 
@@ -77,7 +78,6 @@
                               wrap
                             />
                           </b-form-group>
-
                           <b-form-group id="input-group-4" label="Repeat" label-for="input-4">
                             <b-form-spinbutton 
                               :id="'input-4-' + repeatCount"
@@ -98,11 +98,15 @@
                 </b-card>
               </b-collapse>
             </b-row>
-              
+
             <b-row class="border-bottom" role="tab">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle.repeat_collapse_add href="#">
-                <b-col class="leftalign col-4"/>
-                <b-col class="leftalign col-5 middle" style = "color: black; fontWeight: bold">Click here to add new preset</b-col>
+                <b-col class="col-1">
+                  <b-icon class="h3 mt-0" icon="plus-circle-fill" style="color: black;" variant="black"/>
+                </b-col>
+
+                <b-col class="leftalign col-3">Add</b-col>
+                <b-col class="leftalign col-5 middle"><i style="color: gray">Click to add</i></b-col>
                 <b-col class="pr-2 col-3"/>
               </b-link>
 
@@ -119,14 +123,12 @@
                         required
                       />
                     </b-form-group>
-
                     <b-form-group id="input-group-2" label="Preset Time" label-for="input-2">
                       <b-form-timepicker
                       id="input-2" 
                       v-model="repeatAddform.time" 
                       />  
                     </b-form-group>
-
                     <b-form-group id="input-group-3" label="Amount" label-for="input-3">
                       <b-form-spinbutton 
                         id="input-3"
@@ -137,7 +139,6 @@
                         wrap
                       />
                     </b-form-group>
-
                     <b-form-group id="input-group-4" label="Repeat" label-for="input-4">
                       <b-form-spinbutton 
                         id="input-4"
@@ -148,7 +149,6 @@
                         wrap
                       />
                     </b-form-group>
-
                     <b-button type="submit" variant="primary" class="mr-3">Submit</b-button>
                     <b-button type="reset" variant="danger">Reset</b-button>
                   </b-form>
@@ -159,26 +159,29 @@
         </b-container>
       </div>
     </b-tab>
-
     <b-tab title="Interval Mode">
       <div class="d-flex justify-content-center">
         <b-container>
           <div  class="accordion" role="tablist">
-            <b-row class=" pt-3 pb-3 border-bottom" style = "backgroundColor: orange; color: black" >
-              <b-col class="leftalign col-4" style = "fontWeight: bold">Name</b-col>
+            <b-row class=" pt-3 pb-3 border-bottom" >
+              <b-col class="col-1"><b>#</b></b-col>
+              <b-col class="leftalign col-3"><b>Name</b></b-col>
               <b-col class="leftalign col-5 middle"/>
-              <b-col class="col-3" style = "fontWeight: bold">Status</b-col>
+              <b-col class="col-3"><b>Status</b></b-col>
             </b-row>
             <!-- magic -->
             <div :set="intervalCount = 0"/>
 
             <b-row class="border-bottom" role="tab" :key="o.id" v-for="o in JSON.parse(this.intervalContent)" :set="intervalCount=intervalCount+1">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle="'intervalCollapse-' + intervalCount" href="#">
-                <b-col class="leftalign col-4">{{o.name}}</b-col>
-                <b-col class="leftalign col-5 middle">Click to view detail</b-col>
+                <b-col class="col-1">
+                  {{intervalCount}}
+                </b-col>
+                <b-col class="leftalign col-3">{{o.name}}</b-col>
+                <b-col class="leftalign col-5 middle"><i style="color: gray">Click to view detail</i></b-col>
                 <b-col class="pr-2 col-3">
-                  <div v-if="repeatSelected === o.id">
-                    <b-spinner type="grow" variant small = "false"/>
+                  <div v-if="intervalSelected === o.id">
+                    <span class="active-dot" v-b-popover.hover.top="'Active'"/>
                   </div>
                   <div v-else>
                     <span class="inactive-dot" v-b-popover.hover.top="'Inactive'"></span>
@@ -217,7 +220,6 @@
                             required
                             />
                           </b-form-group>
-
                           <b-form-group id="input-group-2" label="Amount" label-for="input-2">
                             <b-form-spinbutton 
                               :id="'input-2-' + intervalCount" 
@@ -228,7 +230,6 @@
                               wrap
                             />
                           </b-form-group>
-
                           <b-form-group id="input-group-3" label="Interval" label-for="input-3">
                             <b-form-spinbutton 
                               :id="'input-4-' + intervalCount"
@@ -249,11 +250,14 @@
                 </b-card>
               </b-collapse>
             </b-row>
-              
+
             <b-row class="border-bottom" role="tab">
               <b-link class='pt-3 pb-3 row w-100 ml-0' v-b-toggle.interval_collapse_add href="#">
-                <b-col class="leftalign col-4"/>
-                <b-col class="leftalign col-5 middle" style = "color: black; fontWeight: bold">Click here to add new preset</b-col>
+                <b-col class="col-1">
+                  <b-icon class="h3 mt-0" icon="plus-circle-fill" style="color: black;" variant="black"></b-icon>
+                </b-col>
+                <b-col class="leftalign col-3">Add</b-col>
+                <b-col class="leftalign col-5 middle"><i style="color: gray">Click to add</i></b-col>
                 <b-col class="pr-2 col-3"/>
               </b-link>
 
@@ -270,7 +274,6 @@
                         required
                       />
                     </b-form-group>
-
                     <b-form-group id="input-group-2" label="Amount" label-for="input-2">
                       <b-form-spinbutton 
                         id="input-2"
@@ -281,7 +284,6 @@
                         wrap
                       />
                     </b-form-group>
-
                     <b-form-group id="input-group-3" label="Interval" label-for="input-3">
                       <b-form-spinbutton 
                         id="input-3"
@@ -292,7 +294,6 @@
                         wrap
                       />
                     </b-form-group>
-
                     <b-button type="submit" variant="primary" class="mr-3">Submit</b-button>
                     <b-button type="reset" variant="danger">Reset</b-button>
                   </b-form>
@@ -305,7 +306,6 @@
     </b-tab>
   </b-tabs> 
 </template>
-
 <script>
 export default {
   name: 'RepeatView',
@@ -322,12 +322,10 @@ export default {
       repeatAmount:['5', '10', '15', '20', '25' , '30' , '35', '40', '45', '50'],
       repeatValue: 0,
       repeat:['Never', 'Everyday', '2 days', '3 days', '4 days' , '5 days' , '6 days', 'Every week'],
-
       intervalAmountValue: 0,
       intervalAmount:['5', '10', '15', '20', '25' , '30' , '35', '40', '45', '50'],
       intervalValue: 0,
       interval:['Never', 'Every hour', '2 hours', '3 hours', '4 hours' , '5 hours' , '6 hours'],
-
       repeatAddform : {
         name: '',
         time: '',
@@ -340,7 +338,6 @@ export default {
         amount: '',
         repeatValue: '',
       },
-
       intervalAddform : {
         name: '',
         amount: '',
@@ -359,7 +356,6 @@ export default {
     intervalContent: String,
     intervalSelected: Number,
   },
-
   methods: {
       handleRepeatAddPreset(event)
       {
@@ -382,7 +378,6 @@ export default {
           })
         }
       },
-
       handleRepeatDeletePreset(id, name)
       {
         var cnf = window.confirm(`Delete ${name}?`)
@@ -391,7 +386,6 @@ export default {
           this.$emit('delete-repeat-preset', id)
         }
       }, 
-
       handleIntervalAddPreset(event)
       {
         event.preventDefault()
@@ -422,7 +416,6 @@ export default {
           this.$emit('delete-interval-preset', id)
         }
       }, 
-
       resetAddForm()
       {
         this.repeatAddform.name=""
@@ -434,7 +427,6 @@ export default {
         this.intervalValue=0
         console.log("form reset")
       },
-
       resetEditForm()
       {
         this.repeatEditform.name=""
@@ -481,25 +473,23 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .active-dot {
   height: 20px;
   width: 20px;
-  background-color: #00BFA1;
+  background-color: #5cb85c;
   border-radius: 50%;
   display: inline-block;
 }
 .inactive-dot {
   height: 20px;
   width: 20px;
-  background-color: rgb(255, 166, 0);
+  background-color: #f0ad4e;
   border-radius: 50%;
   display: inline-block;
 }
 a {
-  color: white;
-  background-color: grey;
+  color: black;
 }
 a:hover {
   color: black;

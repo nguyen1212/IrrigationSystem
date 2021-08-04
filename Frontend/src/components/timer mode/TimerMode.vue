@@ -1,6 +1,7 @@
 <template>
     <div>
       <div class="mt-5">
+      <h1><b>Timer Preset</b></h1>
         <div v-if="this.PlotId != ''" class="pt-5">
           <TimerView
           :repeatContent="JSON.stringify(this.repeatContent)" 
@@ -11,7 +12,6 @@
           @update-repeat-preset="handleRepeatUpdatePreset"
           @delete-repeat-preset="handleRepeatDeletePreset"
           @select-repeat-preset="handleRepeatSelectPreset"
-
           @add-interval-preset="handleIntervalAddPreset" 
           @update-interval-preset="handleIntervalUpdatePreset"
           @delete-interval-preset="handleIntervalDeletePreset"
@@ -21,7 +21,6 @@
       </div>
     </div>
 </template>
-
 <script>
 import axios from 'axios'
 import TimerView from '../timer mode/TimerView.vue'
@@ -34,10 +33,8 @@ export default {
         return {
             repeatContent: [],
             repeatSelect: -1,
-
             intervalContent: [],
             intervalSelect: -1
-
         }
     },
     created() { 
@@ -95,7 +92,6 @@ export default {
       console.log("new preset list fetched")
       bus.$emit('timerPreset', this.repeatContent)
       },
-
       handleGetIntervalPresetList()
       {
         axios
@@ -134,7 +130,6 @@ export default {
         this.intervalSelect = 3
         console.log("new preset list fetched")
       },
-
       handleRepeatAddPreset(form)
       {
           axios
@@ -174,7 +169,6 @@ export default {
         })
         .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
       },
-
       handleIntervalAddPreset(form)
       {
           axios
@@ -235,4 +229,3 @@ export default {
     }
 }
 </script>
-
