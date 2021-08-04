@@ -79,6 +79,7 @@ func checkError(err error) {
 // }
 
 func HandlePlotDeviceData(w http.ResponseWriter, r *http.Request) {
+	println("Handle Plot Device Data")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.WriteHeader(http.StatusOK)

@@ -54,6 +54,7 @@ func (a *App) initRoutes() {
 }
 
 func HandleTurnOn(w http.ResponseWriter, r *http.Request) {
+	println("Turn Relay On")
 	adaMsg := &DeviceMsg{
 		Id:   "11",
 		Name: "RELAY",
@@ -64,6 +65,7 @@ func HandleTurnOn(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleTurnOff(w http.ResponseWriter, r *http.Request) {
+	println("Turn Relay Off")
 	adaMsg := &DeviceMsg{
 		Id:   "11",
 		Name: "RELAY",
@@ -185,8 +187,8 @@ func subSensor(client mqtt.Client) {
 	topic := make(map[string]byte)
 	topic["MDPSmartFarm/feeds/soilmoist"] = 2
 	topic["MDPSmartFarm/feeds/temphumid"] = 2
-	token := client.SubscribeMultiple(topic, HandleReceivedMsg)
-	token.Wait()
+	client.SubscribeMultiple(topic, HandleReceivedMsg)
+	//token.Wait()
 	for topicName := range topic {
 		fmt.Printf("Subscribed to topic %s", topicName)
 	}
@@ -194,22 +196,23 @@ func subSensor(client mqtt.Client) {
 
 func HandleReceivedMsg(client mqtt.Client, msg mqtt.Message) {
 	var sensorMsg DeviceMsg
-	json.Unmarshal(msg.Payload(), &sensorMsg)
-	subChannel <- sensorMsg
+	println("New Data Received")
+	if err := json.Unmarshal(msg.Payload(), &sensorMsg); err != nil {
+		log.Panic(err)
+	}
 	var url string
 	if sensorMsg.Name == "SOIL" {
 		url = "http://127.0.0.1:8010/api/soil"
-	} else {
-		url = "http://127.0.0.1:8010/api/temp-hum"
-	}
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(msg.Payload()))
-	req.Header.Set("Content-Type", "application/json")
-	checkError(err)
-	sender := &http.Client{}
-	response, err := sender.Do(req)
-	checkError(err)
+		req, err := http.NewRequest("POST", url, bytes.NewBuffer(msg.Payload()))
+		req.Header.Set("Content-Type", "application/json")
+		checkError(err)
+		sender := &http.Client{}
+		response, err := sender.Do(req)
+		checkError(err)
 
-	defer response.Body.Close()
+		defer response.Body.Close()
+	}
+	subChannel <- sensorMsg
 }
 
 func publish(client mqtt.Client, msg *DeviceMsg) {

@@ -41,22 +41,21 @@
           <div class="w-100 row">
             <div class="ml-3"></div>
             <!-- <b-button v-if="selected !== o.id" class="col-1 ml-3" variant="primary" @click="$emit('select-preset', o.id)" >Select</b-button> -->
-            <b-button class="col-1 ml-3" variant="warning" v-b-toggle="'collapse-inner-' + count" @click="resetEditForm">Edit</b-button>
+            <b-button class="col-1 ml-3" variant="warning" v-b-toggle="'collapse-inner-' + count" @click="resetEditForm(o.moistureThreshold, count)">Edit</b-button>
             <b-button v-if="selected !== o.id" class="col-1 ml-3" variant="dark" @click="handleDeletePreset(o.id, o.name)" >Delete</b-button>
           </div>
           <div>
           <b-collapse class='w-100  mt-3' :id="'collapse-inner-' + count">
           <b-card class="ml-0">
             <b-form 
-              @submit="handleUpdatePreset(o.id)" 
-              @reset="resetEditForm">
+              @submit.prevent="handleUpdatePreset(o.id, count)" 
+              @reset.prevent="resetEditForm(o.moistureThreshold, count)">
             <b-form-group style="width: 300px;">
               <label :for="'input-1-' + count" style="width: 300px;" class="leftalign"><b>Preset Name</b></label>
               <b-form-input
                 :id="'input-1-' + count"
                 :placeholder="o.name"
                 v-model="editform.name"
-                required
               >
               </b-form-input>
             </b-form-group>
@@ -104,8 +103,8 @@
         <b-collapse class="w-100" id="collapse_add" accordion="my-accordion"  role="tabpanel">
           <b-card class="ml-0 mt-3 w-100">
             <b-form 
-              @submit="handleAddPreset" 
-              @reset="resetAddForm">
+              @submit.prevent="handleAddPreset" 
+              @reset.prevent="resetAddForm">
             <b-form-group style="width: 300px;">
               <label for="input-add-1" style="width: 300px;" class="leftalign"><b>Preset Name</b></label>
               <b-form-input
@@ -175,9 +174,8 @@ export default {
   },
 
   methods: {
-      handleAddPreset(event)
-      {
-        event.preventDefault()
+      handleAddPreset(){
+        //event.preventDefault()
         this.$emit('add-preset', {
             'type': 'Auto',
             'content': this.addform
@@ -187,13 +185,16 @@ export default {
         // console.log(this.addform.notes)
         
       },            
-      handleUpdatePreset(id, event)
+      handleUpdatePreset(id, count)
       {
-        event.preventDefault()
+        //event.preventDefault()
         
         var cnf = window.confirm(`Update preset with id ${id}?`)
         if (cnf == true)
         {
+          // if (this.editform.name){this.info[id].name = this.editform.name;}
+          // if (this.editform.moisture > 0){this.info[id].moistureThreshold = this.editform.moisture;}
+          // if (this.editform.notes){this.info[id].notes = this.editform.notes;}
           // console.log("ok")
           this.$emit('update-preset', {
             'type': 'Auto',
@@ -201,6 +202,8 @@ export default {
             'content': this.editform
           })
         }
+        let eid = "collapse-inner-" + count
+        document.getElementById(eid).hidden = true;
         // console.log(this.editform.name)
         // console.log(this.editform.moisture)
         // console.log(this.editform.notes)
@@ -224,10 +227,12 @@ export default {
         this.addform.notes=""
         // console.log("form reset")
       },
-      resetEditForm()
+      resetEditForm(moist, id)
       {
+        let eid = "collapse-inner-" + id
+        document.getElementById(eid).hidden = false;
         this.editform.name=""
-        this.editform.moisture=0
+        this.editform.moisture=moist
         this.editform.notes=""
         // console.log("form reset")
       },

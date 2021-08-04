@@ -162,20 +162,28 @@ export default {
       );
     },
     choosePreset(modeType, preset) {
-      var url = "" + modeType;
+      if (modeType == "auto"){
+      var url = "http://127.0.0.1:8010/api/preset/" + modeType;
       axios
-        .post(url, {
-          preset,
-        })
+        .post(url,
+          {
+            id: preset.id,
+            name: preset.name,
+            moistureThreshold: preset.moistureThreshold,
+            notes: preset.notes,
+          }
+        )
         .then((response) => {
           console.log(response);
+          bus.$emit('select-preset', preset.id);
         })
         .catch((error) =>
-          window.alert(`Error while handling PUT request: ${error}`)
+          window.alert(`Error while handling POST request: ${error}`)
         );
+      }
     },
     getPlot() {
-      var self = this;
+      //var self = this;
       // axios
       //   .post("http://localhost:8080/devices/data/info", {
       //     UserId: self.UserId,
@@ -207,7 +215,7 @@ export default {
     selectedMode: function (newMode) {
       this.selectedMode = newMode;
       console.log(newMode.mode, newMode.preset);
-      // this.choosePreset(newMode.mode, newMode.preset)
+      this.choosePreset(newMode.mode, newMode.preset)
     },
   },
 };
