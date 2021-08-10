@@ -2,7 +2,8 @@ package main
 
 import mqtt "github.com/eclipse/paho.mqtt.golang"
 
-var client mqtt.Client
+var client1 mqtt.Client
+var client2 mqtt.Client
 
 func main() {
 
@@ -16,11 +17,16 @@ func main() {
 		"postgres",
 		"123456",
 		"testdb")
-	client = createClient()
-	token := client.Connect()
-	if token.Wait() && token.Error() != nil {
-		panic(token.Error())
+	client1 = createClient()
+	client2 = createClient2()
+	token2 := client2.Connect()
+	if token2.Wait() && token2.Error() != nil {
+		panic(token2.Error())
 	}
-	go subSensor(client)
+	token1 := client1.Connect()
+	if token1.Wait() && token1.Error() != nil {
+		panic(token1.Error())
+	}
+	go subSensor(client1)
 	a.Run(":8080")
 }

@@ -41,6 +41,18 @@ export default {
       if (this.PlotId != ''){
         this.handleGetRepeatPresetList();
         this.handleGetIntervalPresetList();
+        bus.$on("select-repeat", (presetId)=>{
+          this.repeatSelect = presetId;
+        })
+        bus.$on("select-interval", (presetId)=>{
+          this.intervalSelect = presetId;
+        })
+        bus.$on('deselect-interval', () => {
+          this.intervalSelect = -1
+        });
+        bus.$on('deselect-repeat', () => {
+          this.repeatSelect = -1
+        });
       }
       else
       {
@@ -51,19 +63,12 @@ export default {
     methods: {
       handleGetRepeatPresetList()
       {
-        axios
-        .get('url')
-        .then((response) => {
-            this.repeatContent = response.presetRepeatContent
-            this.repeatSelect = response.selectedRepeatPreset
-        })
-        .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
         this.repeatContent = [
           {
               "id": 0,
               "name": "Preset 1",
               "time": "11:11:00",
-              "amount": "80",
+              "amount": "20",
               "repeat": "Everyday",
           },
           {
@@ -88,19 +93,12 @@ export default {
               "repeat": "3 days",
           }
       ],
-      this.repeatSelect = 1
+      this.repeatSelect = -1
       console.log("new preset list fetched")
       bus.$emit('timerPreset', this.repeatContent)
       },
       handleGetIntervalPresetList()
       {
-        axios
-        .get('url')
-        .then((response) => {
-            this.intervalContent = response.presetIntervalContent
-            this.intervalSelect = response.selectedIntervalPreset
-        })
-        .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
         this.intervalContent = [
           {
               "id": 0,
@@ -127,37 +125,34 @@ export default {
               "interval": "5 hours",
           }
         ],
-        this.intervalSelect = 3
-        console.log("new preset list fetched")
+        this.intervalSelect = -1;
+        console.log("new preset list fetched");
+        bus.$emit("intervalPreset", this.intervalContent);
       },
       handleRepeatAddPreset(form)
       {
-          axios
-          .post('url', form)
-          .then((response) => {
-          console.log(response);
-         this.handleGetRepeatPresetList();
+         this.repeatContent.push({
+           id: this.repeatContent.length,
+           name: form.content.name,
+           time: form.content.time,
+           amount: form.content.amount,
+           repeat: form.content.repeatValue
          })
-          .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
+         bus.$emit('timerPreset', this.repeatContent)
       },
       handleRepeatUpdatePreset(form)
       {
-        axios
-        .put('url',form)
-        .then((response) => {
-            console.log(response);
-            this.handleGetRepeatPresetList();
-        })
-        .catch((error) => window.alert(`Error while handling PUT request: ${error}` ))
+        if (form.content.name){this.repeatContent[form.id].name = form.content.name}
+        if (form.content.time){this.repeatContent[form.id].time = form.content.time}
+        if (form.content.amount){this.repeatContent[form.id].amount = form.content.amount}
+        if (form.content.repeatValue){this.repeatContent[form.id].repeat = form.content.repeatValue}
+        bus.$emit('timerPreset', this.repeatContent)
       },
       handleRepeatDeletePreset(id)
       {
-        axios
-        .delete('url', id)
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
+        this.repeatContent.splice(id,1)
+        if (this.repeatSelect < id){this.repeatSelect -= 1;}
+        bus.$emit('timerPreset', this.repeatContent)
       },
       handleRepeatSelectPreset(id)
       {
@@ -171,32 +166,26 @@ export default {
       },
       handleIntervalAddPreset(form)
       {
-          axios
-          .post('url', form)
-          .then((response) => {
-          console.log(response);
-         this.handleGetIntervalPresetList();
+         this.intervalContent.push({
+           id: this.intervalContent.length,
+           name: form.content.name,
+           amount: form.content.amount,
+           interval: form.content.interval
          })
-          .catch((error) => window.alert(`Error while handling POST request: ${error}` ))
+         bus.$emit("intervalPreset", this.intervalContent);
       },
       handleIntervalUpdatePreset(form)
       {
-        axios
-        .put('url',form)
-        .then((response) => {
-            console.log(response);
-            this.handleGetIntervalPresetList();
-        })
-        .catch((error) => window.alert(`Error while handling PUT request: ${error}` ))
+        if (form.content.name){this.repeatContent[form.id].name = form.content.name}
+        if (form.content.interval){this.repeatContent[form.id].interval = form.content.interval}
+        if (form.content.amount){this.repeatContent[form.id].amount = form.content.amount}
+        bus.$emit("intervalPreset", this.intervalContent);
       },
       handleIntervalDeletePreset(id)
       {
-        axios
-        .delete('url', id)
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) => window.alert(`Error while handling GET request: ${error}` ))
+        this.intervalContent.splice(id,1)
+        if (this.intervalSelect < id){this.intervalSelect -= 1;}
+        bus.$emit("intervalPreset", this.intervalContent);
       },
       handleIntervalSelectPreset(id)
       {

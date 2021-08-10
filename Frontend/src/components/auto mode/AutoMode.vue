@@ -52,7 +52,7 @@ export default {
                 "notes": "Bay leaves are delicious"
             }
         ],
-            select: 2
+            select: 1
         }
     },
     created() { 
@@ -62,6 +62,9 @@ export default {
         bus.$on("select-preset", (presetId)=>{
           this.handleSelectPreset(presetId);
         })
+        bus.$on('deselect-auto', () => {
+          this.select = -1
+        });
       }
       else
       {
@@ -97,6 +100,7 @@ export default {
           moistureThreshold: form.content.moisture,
           notes: form.content.notes,
         })
+        bus.$emit('autoPresets', this.info)
         // console.log("form to be added:", form)
 
       },
@@ -116,6 +120,7 @@ export default {
         console.log(this.info[form.id].name)
         console.log(this.info[form.id].moistureThreshold)
         console.log(this.info[form.id].notes)
+        bus.$emit('autoPresets', this.info)
       },
       handleDeletePreset(id)
       {
@@ -128,11 +133,12 @@ export default {
         /*console.log(`preset ${id} deleted`) */
         this.info.splice(id,1);
         if (this.select < id){this.select -= 1;}
+        bus.$emit('autoPresets', this.info)
       },
       handleSelectPreset(id)
       {
         this.select = id;
-        console.log("run");
+       
         // console.log(`preset ${id} selected`)
         //   axios
         //   .post('url', id)

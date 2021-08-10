@@ -85,7 +85,7 @@ export default {
             }
           },
           dataLabels: {
-            enabled: true
+            enabled: false
           },
           markers: {
             size: 0,
@@ -158,6 +158,7 @@ export default {
         this.max = response.data.max
         this.avg = response.data.avg
         this.maxTime = new Date(response.data.maxTime).toISOString().split("T")[1]
+        console.log("max")
         this.minTime = new Date(response.data.minTime).toISOString().split("T")[1]
         console.log(response.data.Data)
         this.series = [{

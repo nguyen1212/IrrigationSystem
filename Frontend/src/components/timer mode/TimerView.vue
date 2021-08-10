@@ -52,14 +52,14 @@
                     <b-collapse class='w-100  mt-3' :id="'repeatCollapse-inner-' + repeatCount">
                       <b-card class="ml-0">
                         <b-form 
-                          @submit="handleRepeatUpdatePreset(o.id)" 
-                          @reset="resetEditForm">
+                          @submit.prevent="handleRepeatUpdatePreset(o.id)" 
+                          @reset.prevent="resetEditForm">
                           <b-form-group id="input-group-1" label="Preset Name" label-for="input-1">
                             <b-form-input
                             :id="'input-1-' + repeatCount"
                             v-model="repeatEditform.name"
                             placeholder="Enter name"
-                            required
+                            
                             />
                           </b-form-group>
                           <b-form-group id="input-group-2" label="Preset Time" label-for="input-2">
@@ -113,8 +113,8 @@
               <b-collapse class="w-100" id="repeat_collapse_add" accordion="my-accordion"  role="tabpanel">
                 <b-card class="border-0 ml-0 w-100">
                   <b-form 
-                    @submit="handleRepeatAddPreset" 
-                    @reset="resetAddForm">
+                    @submit.prevent="handleRepeatAddPreset" 
+                    @reset.prevent="resetAddForm">
                     <b-form-group id="input-group-1" label="Preset Name" label-for="input-1">
                       <b-form-input
                         id="input-1"
@@ -210,14 +210,14 @@
                     <b-collapse class='w-100  mt-3' :id="'intervalCollapse-inner-' + intervalCount">
                       <b-card class="ml-0">
                         <b-form 
-                          @submit="handleIntervalUpdatePreset(o.id)" 
-                          @reset="resetEditForm">
+                          @submit.prevent="handleIntervalUpdatePreset(o.id)" 
+                          @reset.prevent="resetEditForm">
                           <b-form-group id="input-group-1" label="Preset Name" label-for="input-1">
                             <b-form-input
                             :id="'input-1-' + intervalCount"
                             v-model="intervalEditform.name"
                             placeholder="Enter name"
-                            required
+                            
                             />
                           </b-form-group>
                           <b-form-group id="input-group-2" label="Amount" label-for="input-2">
@@ -264,8 +264,8 @@
               <b-collapse class="w-100" id="interval_collapse_add" accordion="my-accordion" role="tabpanel">
                 <b-card class="border-0 ml-0 w-100">
                   <b-form 
-                    @submit="handleIntervalAddPreset" 
-                    @reset="resetAddForm">
+                    @submit.prevent="handleIntervalAddPreset" 
+                    @reset.prevent="resetAddForm">
                     <b-form-group id="input-group-1" label="Preset Name" label-for="input-1">
                       <b-form-input
                         id="input-1"
@@ -357,17 +357,17 @@ export default {
     intervalSelected: Number,
   },
   methods: {
-      handleRepeatAddPreset(event)
+      handleRepeatAddPreset()
       {
-        event.preventDefault()
+        //event.preventDefault()
         this.$emit('add-repeat-preset', {
           'type': "TimerRepeat",
           'content': this.repeatAddform
         })
       },            
-      handleRepeatUpdatePreset(id,event)
+      handleRepeatUpdatePreset(id)
       {
-        event.preventDefault()
+        //event.preventDefault()
         var cnf = window.confirm(`Update preset with id ${id}?`)
         if (cnf == true)
         {
@@ -386,17 +386,17 @@ export default {
           this.$emit('delete-repeat-preset', id)
         }
       }, 
-      handleIntervalAddPreset(event)
+      handleIntervalAddPreset()
       {
-        event.preventDefault()
+        //event.preventDefault()
         this.$emit('add-interval-preset', {
           'type': "TimerInterval",
           'content': this.intervalAddform
         })
       },            
-      handleIntervalUpdatePreset(id,event)
+      handleIntervalUpdatePreset(id)
       {
-        event.preventDefault()
+       //event.preventDefault()
         var cnf = window.confirm(`Update preset with id ${id}?`)
         if (cnf == true)
         {

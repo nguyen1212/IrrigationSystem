@@ -14,7 +14,7 @@
       </div>
       <!-- DISPLAY GRAPH -->
       <div class="row graph-content">
-        <div class="col-12">
+        <div class="col-10">
           <apexchart
             ref="waterlogchart"
             type="bar"
@@ -57,12 +57,10 @@ export default {
       return {
         range: '',
         avg: '',
-        series: [
-          {
+        series: [{
             name: "Ammount of Water",
             data: [],
-          },
-        ],
+          }],
         chartOptions: {
           chart: {
             type: "bar",
@@ -119,7 +117,7 @@ export default {
       // console.log(this.extractDate(self.range[0]));
       // console.log(this.extractDate(self.range[1]));
       axios
-        .post("url", {
+        .post("http://127.0.0.1:8080/devices/water/log", {
           startDate: this.extractDate(self.range[0]),
           endDate: this.extractDate(self.range[1]),
         })

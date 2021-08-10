@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-center">
       <div id="intro-1">      
       <p class="h5">
-      <b>Smart Irrigation System <br>
+      <b>         Smart Irrigation System <br>
        intergrates automatic watering and advance tracking,
        highly customizable design and IoT Soil Monitor
       </b></p>
@@ -125,7 +125,7 @@ export default {
   name: 'home',
   data () {
     return {
-      webpage: 'WE CAN\'T SAVE YOUR BRAIN BUT YOUR PLANTS!',
+      webpage: 'Effortless Planting!',
       autoMode: autoMode,
       waterLog: waterLog,
       timerMode: timerMode,
@@ -146,7 +146,7 @@ export default {
 #headline {
   margin: 30px;
   padding-left: 150px;
-  text-align: left;
+  text-align: center;
 }
 #intro-1 {
   max-width: 500px;

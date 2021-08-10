@@ -106,7 +106,11 @@ export default {
           options: [],
         },
         {
-          label: "Timer Mode",
+          label: "Interval Mode",
+          options: [],
+        },
+        {
+          label: "Repeat Mode",
           options: [],
         },
       ],
@@ -123,12 +127,21 @@ export default {
         });
       }
     });
-    bus.$on("timerPresets", (timerPresets) => {
+    bus.$on("intervalPreset", (intervalPresets) => {
       this.modes[2].options = [];
-      for (let i = 0; i < timerPresets.length; i++) {
+      for (let i = 0; i < intervalPresets.length; i++) {
         this.modes[2].options.push({
-          value: { preset: timerPresets[i], mode: "timer" },
-          text: "[Timer] " + timerPresets[i]["name"],
+          value: { preset: intervalPresets[i], mode: "interval" },
+          text: "[Interval] " + intervalPresets[i]["name"],
+        });
+      }
+    });
+    bus.$on("timerPreset", (timerPresets) => {
+      this.modes[3].options = [];
+      for (let i = 0; i < timerPresets.length; i++) {
+        this.modes[3].options.push({
+          value: { preset: timerPresets[i], mode: "repeat" },
+          text: "[Repeat] " + timerPresets[i]["name"],
         });
       }
     });
@@ -176,6 +189,51 @@ export default {
         .then((response) => {
           console.log(response);
           bus.$emit('select-preset', preset.id);
+          bus.$emit('deselect-interval');
+          bus.$emit('deselect-repeat');
+        })
+        .catch((error) =>
+          window.alert(`Error while handling POST request: ${error}`)
+        );
+      }
+      if (modeType == "interval"){
+      url = "http://127.0.0.1:8010/api/preset/" + modeType;
+      axios
+        .post(url,
+          {
+            id: preset.id,
+            name: preset.name,
+            amount: preset.amount,
+            interval: preset.interval,
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          bus.$emit('select-interval', preset.id);
+          bus.$emit('deselect-repeat');
+          bus.$emit('deselect-auto');
+        })
+        .catch((error) =>
+          window.alert(`Error while handling POST request: ${error}`)
+        );
+      }
+      if (modeType == "repeat"){
+      url = "http://127.0.0.1:8010/api/preset/" + modeType;
+      axios
+        .post(url,
+          {
+            id: preset.id,
+            name: preset.name,
+            amount: preset.amount,
+            time: preset.time,
+            repeat: preset.repeat
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          bus.$emit('select-repeat', preset.id);
+          bus.$emit('deselect-interval');
+          bus.$emit('deselect-auto');
         })
         .catch((error) =>
           window.alert(`Error while handling POST request: ${error}`)

@@ -49,6 +49,9 @@ func (a *App) initRoutes() {
 	a.Router.
 		HandleFunc("/devices/data/log", data.HandlePlotDeviceData).
 		Methods("POST", "OPTIONS")
+	a.Router.
+		HandleFunc("/devices/water/log", data.HandlePlotWater).
+		Methods("POST", "OPTIONS")
 	a.Router.HandleFunc("/devices/water/on", HandleTurnOn).Methods("GET")
 	a.Router.HandleFunc("/devices/water/off", HandleTurnOff).Methods("GET")
 }
@@ -61,7 +64,7 @@ func HandleTurnOn(w http.ResponseWriter, r *http.Request) {
 		Data: "1",
 		Unit: "",
 	}
-	publish(client, adaMsg)
+	publish(client2, adaMsg)
 }
 
 func HandleTurnOff(w http.ResponseWriter, r *http.Request) {
@@ -72,7 +75,7 @@ func HandleTurnOff(w http.ResponseWriter, r *http.Request) {
 		Data: "0",
 		Unit: "",
 	}
-	publish(client, adaMsg)
+	publish(client2, adaMsg)
 }
 
 func (a *App) Init(user, password, dbname string) {
@@ -115,7 +118,7 @@ func handleWSConnections(w http.ResponseWriter, r *http.Request) {
 	log.Println("Websocket formed!")
 	defer ws.Close()
 
-	go read(ws, client)
+	go read(ws, client1)
 	write(ws)
 
 }
@@ -128,11 +131,13 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 		err := ws.ReadJSON(&msg)
 		if err != nil {
 			ws.Close()
-			client.Disconnect(250)
+			client1.Disconnect(250)
+			client2.Disconnect(250)
 			log.Printf("%v", err)
 			return
 		}
 		if msg.Data == "1" {
+			log.Println("Force Turn Off")
 			adaMsg = &DeviceMsg{
 				Id:   "11",
 				Name: "RELAY",
@@ -140,6 +145,7 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 				Unit: "",
 			}
 		} else if msg.Data == "0" {
+			log.Println("Force Turn On")
 			adaMsg = &DeviceMsg{
 				Id:   "11",
 				Name: "RELAY",
@@ -147,7 +153,7 @@ func read(ws *websocket.Conn, client mqtt.Client) {
 				Unit: "",
 			}
 		}
-		publish(client, adaMsg)
+		publish(client2, adaMsg)
 	}
 }
 
@@ -174,19 +180,35 @@ func createClient() mqtt.Client {
 	opts.AddBroker("tcp://io.adafruit.com:1883")
 	opts.SetClientID("Demo")
 	// Username of Adafruit account -> For demo only
-	opts.SetUsername("MDPSmartFarm")
+	opts.SetUsername("CSE_BBC")
 	// Key of Adafruit account: Get from MyKey tab -> For demo only
-	opts.SetPassword("aio_nnpA09HHrye2fisiYQ3YKoY9cyis")
+	opts.SetPassword("")
 	opts.SetDefaultPublishHandler(messagePubHandler)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	return mqtt.NewClient(opts)
 }
 
+func createClient2() mqtt.Client {
+	opts := mqtt.NewClientOptions()
+	opts.AddBroker("tcp://io.adafruit.com:1883")
+	opts.SetClientID("Demo2")
+	// Username of Adafruit account -> For demo only
+	//opts.SetUsername("CSE_BBC1")
+	opts.SetUsername("CSE_BBC1")
+	// Key of Adafruit account: Get from MyKey tab -> For demo only
+	opts.SetPassword("")
+	opts.SetDefaultPublishHandler(messagePubHandler)
+	opts.OnConnect = connectHandler
+	opts.OnConnectionLost = connectLostHandler
+	println("Client 2 ", opts.Username)
+	return mqtt.NewClient(opts)
+}
+
 func subSensor(client mqtt.Client) {
 	topic := make(map[string]byte)
-	topic["MDPSmartFarm/feeds/soilmoist"] = 2
-	topic["MDPSmartFarm/feeds/temphumid"] = 2
+	topic["CSE_BBC/feeds/bk-iot-soil"] = 2
+	topic["CSE_BBC/feeds/bk-iot-temp-humid"] = 2
 	client.SubscribeMultiple(topic, HandleReceivedMsg)
 	//token.Wait()
 	for topicName := range topic {
@@ -216,7 +238,7 @@ func HandleReceivedMsg(client mqtt.Client, msg mqtt.Message) {
 }
 
 func publish(client mqtt.Client, msg *DeviceMsg) {
-	topic := "MDPSmartFarm/feeds/pumprelay"
+	topic := "CSE_BBC1/feeds/bk-iot-relay"
 	data, _ := json.Marshal(msg)
 	token := client.Publish(topic, 1, true, data)
 	token.Wait()
